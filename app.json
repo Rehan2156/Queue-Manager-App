@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ReactNativeDemo",
-    "slug": "ReactNativeDemo",
+    "name": "QueT",
+    "slug": "quet",
     "platforms": [
       "ios",
       "android",
@@ -23,6 +23,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": ""
   }
 }
