@@ -3,9 +3,9 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
 // stacks
-import RootDrawerNavigator from './drawer';
-import LoadingScreen from '../screens/LoadingScreen';
-import LoginStack from './LoginStack';
+import RootDrawerNavigator from './DrawerNaviagtion/drawer';
+import LoadingScreen from '../screens/LoginFlow/LoadingForLogin';
+import LoginStack from './LoginFlow/LoginStack';
 
 // drawer navigation options
 const MainNav = createSwitchNavigator({

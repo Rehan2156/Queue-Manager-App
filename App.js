@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
-import Navigator from './routes/MainNav';
+import MainRoute from './routes/MainRoute';
 import * as firebase from 'firebase';
 import firebaseConfig from './config'
 
@@ -17,7 +17,7 @@ export default function App() {
 
   if (fontsLoaded) {
     return (
-      <Navigator />
+      <MainRoute />
     );
   } else {
     return (
