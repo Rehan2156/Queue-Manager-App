@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "QueT",
-    "slug": "quet",
+    "slug": "newquet",
     "platforms": [
       "ios",
       "android",
@@ -24,6 +24,7 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": ""
+    "description": "",
+    "githubUrl": "https://github.com/leo13200006/Quet"
   }
 }

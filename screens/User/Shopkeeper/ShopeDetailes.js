@@ -15,8 +15,9 @@ export default class ShopeDetailes extends Component {
                 Category_of_shop: this.state.category,
                 location_of_shop: this.state.loaction
             })
-            .then(function(snapshot) {                
+            .then(() => {                
                 Alert.alert('Information','User Data is Uploaded')
+                this.props.navigation.navigate("Shop")
             });
     }
 
