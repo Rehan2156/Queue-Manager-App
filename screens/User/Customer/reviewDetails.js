@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text,TouchableOpacity,Alert } from 'react-native';
-import { globalStyles } from '../styles/global';
-import Card from '../shared/card';
+import { globalStyles } from '../../../styles/global';
+import Card from '../../../shared/card';
 import { MaterialIcons } from '@expo/vector-icons';
 
 

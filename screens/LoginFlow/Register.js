@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
       borderColor: '#eee',
       borderRadius: 10,
       alignItems: 'center',
-      backgroundColor: 'skyblue',
+      backgroundColor: 'coral',
       borderBottomWidth: 1,
       borderBottomColor: 'blue',
     },

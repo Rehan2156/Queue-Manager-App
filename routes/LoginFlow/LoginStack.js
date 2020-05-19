@@ -5,13 +5,20 @@ import Login from '../../screens/LoginFlow/Login';
 import Register from '../../screens/LoginFlow/Register';
 
 const LoginNav = createStackNavigator({
-    Login: {
-        screen: Login,
-    },
+        Login: {
+            screen: Login,
+        },
 
-    Register: {
-        screen: Register,
+        Register: {
+            screen: Register,
+        },
     },
-})
+    {
+        defaultNavigationOptions: {
+          headerTintColor: '#444',
+          headerStyle: { backgroundColor: 'coral', height: 80,borderBottomLeftRadius:20,borderBottomRightRadius:20 }
+        }
+      }
+)
 
 export default LoginNav

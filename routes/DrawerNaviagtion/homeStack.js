@@ -1,6 +1,6 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import React from 'react';
-import Header from '../shared/header';
+import Header from '../../shared/header';
 import Home from '../../screens/User/Customer/home';
 import ReviewDetails from '../../screens/User/Customer/reviewDetails';
 import Account from '../../screens/User/Customer/account';

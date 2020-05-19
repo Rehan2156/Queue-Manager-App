@@ -6,9 +6,16 @@ import ShopeKeeperLoading from '../../screens/User/Shopkeeper/ShopeKeeperLoading
 import ShopeDetailes from '../../screens/User/Shopkeeper/ShopeDetailes';
 
 const ShopRoute = createSwitchNavigator({
-    Loading: ShopeKeeperLoading,
-    Details: ShopeDetailes,
-    Shop: Shopkeeper
-})
+        Loading: ShopeKeeperLoading,
+        Details: ShopeDetailes,
+        Shop: Shopkeeper
+    },
+    {
+        defaultNavigationOptions: {
+            headerTintColor: '#444',
+            headerStyle: { backgroundColor: 'coral', height: 80,borderBottomLeftRadius:20,borderBottomRightRadius:20 }
+        }
+    }
+)
 
 export default ShopRoute
