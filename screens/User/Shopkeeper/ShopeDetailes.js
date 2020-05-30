@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Picker, Alert } from 'react-native'
+import { Text, StyleSheet, View, Picker, Dimensions, Alert } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import * as firebase from 'firebase'
 
 export default class ShopeDetailes extends Component {
 
-    uploadTheDeatils = async () =>{
+    state = {
+        name: "",
+        shopName: "",
+        category: "House Hold Items",
+    }
+
+    uploadTheDeatils = async () => {
         await firebase
             .database()
             .ref('/shop/' + firebase.auth().currentUser.uid)
@@ -13,19 +19,15 @@ export default class ShopeDetailes extends Component {
                 shopkeeper_name: this.state.name,
                 shop_name: this.state.shopName,
                 Category_of_shop: this.state.category,
-                location_of_shop: this.state.loaction
             })
             .then(() => {                
                 Alert.alert('Information','User Data is Uploaded')
-                this.props.navigation.navigate("Shop")
+                if(this.state.name !== "" && this.state.shopName !== "" && this.state.selectedValue !== "") {
+                    this.props.navigation.navigate('ShopLocation')
+                } else {
+                    Alert.alert("Fill Every Info please")
+                }
             });
-    }
-
-    state = {
-        name: "",
-        shopName: "",
-        category: "",
-        loaction: "",
     }
 
     render() {
@@ -58,22 +60,11 @@ export default class ShopeDetailes extends Component {
                     <Picker.Item label="Liquor" value="Liquor" />
                 </Picker>
 
-                <Text style={styles.label}>Location Of The Shop </Text>
-                <TouchableOpacity style={styles.myBtnA}>
-                    <Text style={styles.label}>Click To Select Location </Text>
-                </TouchableOpacity>
-
                 <TouchableOpacity 
                     style={styles.myBtnB}
-                    onPress = {() => {
-                        console.log('Name: ' + this.state.name)
-                        console.log('Shop Name: ' + this.state.shopName)
-                        console.log('Category: ' + this.state.selectedValue)
-                        console.log('Location: ' + this.state.loaction)
-                        this.uploadTheDeatils()
-                    }}
+                    onPress={this.uploadTheDeatils}
                 >
-                    <Text style={styles.label}>Upload </Text>
+                    <Text style={styles.label}> Next </Text>
                 </TouchableOpacity>
             </View>
         )
@@ -119,7 +110,8 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#aaa',
         alignItems: 'center',
-        backgroundColor: '#def'
+        backgroundColor: '#def',
+        marginTop: 30,
     },
 
     Header: {
@@ -128,5 +120,4 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingBottom: 20,
     },
-
 })
