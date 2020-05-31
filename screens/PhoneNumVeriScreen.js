@@ -3,7 +3,6 @@ import { Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Platform, 
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import * as firebase from "firebase";
 
-
 const PhoneNumVeriScreen = ( props ) => {
     const recaptchaVerifier = React.useRef(null);
     const [phoneNumber, setPhoneNumber] = React.useState();
