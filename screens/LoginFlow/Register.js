@@ -57,7 +57,7 @@ export default class Register extends Component {
 
             <TouchableOpacity 
               style={styles.myBtn} 
-              onPress = {() =>   GoogleSi.signUpInPress()}
+              onPress = {() =>   GoogleSi.signInOnPress()}
             >
               <Text style={styles.btnText} > Sign Up With Google </Text>
             </TouchableOpacity>

@@ -12,7 +12,9 @@ export default class ShopeDetailes extends Component {
     }
 
     uploadTheDeatils = async () => {
-        await firebase
+        console.log('hello')
+        if(this.state.name !== "" && this.state.shopName !== "" && this.state.selectedValue !== "") {
+            await firebase
             .database()
             .ref('/shop/' + firebase.auth().currentUser.uid)
             .set({
@@ -22,12 +24,11 @@ export default class ShopeDetailes extends Component {
             })
             .then(() => {                
                 Alert.alert('Information','User Data is Uploaded')
-                if(this.state.name !== "" && this.state.shopName !== "" && this.state.selectedValue !== "") {
-                    this.props.navigation.navigate('ShopLocation')
-                } else {
-                    Alert.alert("Fill Every Info please")
-                }
+                this.props.navigation.navigate('ShopLocation')
             });
+        } else {
+            Alert.alert("Fill Every Info please")
+        }        
     }
 
     render() {

@@ -4,30 +4,29 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import * as firebase from 'firebase'
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
-import { color } from 'react-native-reanimated';
 
 export default class ShopLocationScreen extends Component {
 
     state = {
-        loaction: {
-            latitude: 18.454834,
-            longitude: 73.8138944
-        },
-        newLoc: {
-            latitude: 18.454834,
-            longitude: 73.8138944
-        },
+        loaction: null,
+        newLoc: null,
         errMsg: null,
     }
-    componentDidMount = async () => {
 
+    getTheLocationAtFirst = async () => {
+        console.log('location at first')
         let { status } = await Location.requestPermissionsAsync();
         if (status !== 'granted') {
             this.props.setState({errMsg: 'Permission to access location was denied'})
         }    
         var location = await Location.getCurrentPositionAsync({})
         this.setState({loaction: location.coords, newLoc: location.coords})
-        console.log(this.state.loaction)
+    }
+
+    constructor(props) {
+        super(props)
+        this.getTheLocationAtFirst()
+        .then(console.log('Constructor'))        
     }
 
     uploadTheDeatils = async () => {
@@ -43,7 +42,7 @@ export default class ShopLocationScreen extends Component {
             });
     }
 
-    getTheLocation = async () => {
+    getTheLocation = () => {
         console.log('hello')
         var loc = this.state.newLoc
         this.setState({
@@ -56,35 +55,35 @@ export default class ShopLocationScreen extends Component {
             newLoc: region
         })
     }
-
+    
     render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.Header}>Location Of The Shop </Text>    
-                    <MapView 
+                   { this.state.loaction && <MapView 
                         style={styles.mapStyle} 
                         initialRegion={{
-                            latitude: this.state.loaction.latitude,
+                            latitudeDelta: 1.3,
+                            longitudeDelta: 1.0,
                             longitude: this.state.loaction.longitude,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
+                            latitude: this.state.loaction.latitude
                         }}
                         onRegionChange={this.onRegionChange}
                         zoomControlEnabled
                     >
-
-                        <Marker
+                         { this.state.newLoc && <Marker
                             pinColor='blue'
                             coordinate={this.state.newLoc}
-                            title="You are Here"
-                        />
+                            title="You Want this place to select"
+                        /> }
 
                         <Marker
                             coordinate={this.state.loaction}
                             title="You are Here"
                         />
 
-                    </MapView>
+                    </MapView> }
+
                     <TouchableOpacity style={styles.myBtnA} onPress={this.getTheLocation}>
                         <Text style={styles.label}>Click To Select Location </Text>
                     </TouchableOpacity>
