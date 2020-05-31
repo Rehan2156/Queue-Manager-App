@@ -9,18 +9,26 @@ export default class LoginScreen extends Component {
         email: "",
         password: "",
         erromsg: null,
-        loggedIn: null
+        loggedIn: null,
+        loading:false
     }
 
     handlingLogin = () => {
+        this.setState({loading: true})
         firebase
             .auth()
             .signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() => this.setState({loggedIn: 'You are now logged in'}))
-            .catch(error => this.setState({ erromsg: error.message }))
+            .then(() => {
+                this.setState({
+                    loading: false,
+                    loggedIn: 'You are now logged in'
+                })
+            })            
+            .catch(error => this.setState({ erromsg: error.message, loading:false }))
      }
 
     render() {
+        if(!this.state.loading){
         return (
             <View style={styles.conatiner}>
 
@@ -50,7 +58,7 @@ export default class LoginScreen extends Component {
                     style={styles.Btn}
                     onPress={this.handlingLogin}
                 >
-                    <Text style={styles.text}>Sign In</Text>
+                    <Text >Sign In</Text>
                 </TouchableOpacity>
 
 
@@ -61,7 +69,14 @@ export default class LoginScreen extends Component {
                     <Text style={styles.signuptext}> Want to Start Fresh '<Text style={styles.maintext}> Sign Up </Text>' </Text>
                 </TouchableOpacity>
             </View>
-        )
+        )}
+        else{
+            return(
+                <View style={styles.splash}>
+                <Text style={styles.splashText}>Loading...</Text>
+                </View>
+            )
+        }
     }
 }
 
@@ -131,5 +146,16 @@ const styles = StyleSheet.create({
         height: 65,
         fontSize: 15,
         color: '#161f3d'
+    },
+    splash:{
+        flex:1,
+        fontSize:50,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    splashText: {
+        color: 'darkslateblue',
+        fontWeight: 'bold',
+        fontSize: 30,
     },
 })

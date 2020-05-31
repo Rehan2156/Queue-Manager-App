@@ -8,7 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 export default function Home({ navigation }) {
   const [shops, setShop] = useState([
-    { shopName: 'Reliance store', waiting: 50, body: 'lorem ipsum', key: '1',location:'https://goo.gl/maps/hFuasuqSfLFua7816' },
+    { shopName: 'Reliance', waiting: 50, body: 'lorem ipsum', key: '1',location:'https://goo.gl/maps/hFuasuqSfLFua7816' },
     { shopName: 'Star Super Market', waiting: 45, body: 'lorem ipsum', key: '2',location:'https://goo.gl/maps/LzBw6AYFSocewDdP7' },
     { shopName: 'D Mart', waiting: 30, body: 'lorem ipsum', key: '3',location:'https://goo.gl/maps/wNTPKD9YXLhZGHnx5' },
   ]);

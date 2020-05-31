@@ -4,6 +4,8 @@ import Header from '../shared/header';
 import Home from '../screens/home';
 import ReviewDetails from '../screens/reviewDetails';
 import Account from '../screens/account';
+import UserQ from '../screens/userQ';
+
 
 const screens = {
 
@@ -16,7 +18,7 @@ const screens = {
     },
   },
   ReviewDetails: {
-    screen: ReviewDetails,
+    screen: UserQ,
     navigationOptions: {
       title: 'Shop Details',
     }

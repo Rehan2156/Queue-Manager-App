@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "QueT",
-    "slug": "quet",
+    "name": "queueDone",
+    "slug": "queuedone",
     "platforms": [
       "ios",
       "android",

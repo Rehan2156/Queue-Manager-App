@@ -9,25 +9,28 @@ export default class RegisterScreen extends Component {
         email: "",
         password: "",
         erromsg: null,
-        loggedIn: null
+        loggedIn: null,
+        loading:false
     }
 
     handSignUp = () => {
+        this.setState({loading: true})
         firebase
             .auth()
             .createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then(userCredential => {
-                this.setState({loggedIn: 'You are know a member'})
+                this.setState({loggedIn: 'You are know a member', loading: false })
                 return userCredential.user.updateProfile({
-                    displayName: this.state.name
+                    displayName: this.state.names
                 })
             })
-            .catch(error => this.setState({ erromsg: error.message }))
+            .catch(error => this.setState({ erromsg: error.message, loading:false }))
 
             console.log('Pressed Register')
     }
 
     render() {
+        if(!this.state.loading){
         return (
             <View style={styles.conatiner}>
 
@@ -68,7 +71,13 @@ export default class RegisterScreen extends Component {
                 </TouchableOpacity>
 
             </View>
-        )
+        )}else{
+            return(
+                <View style={styles.splash}>
+                <Text style={styles.splashText}>Loading...</Text>
+                </View>
+            )
+        }
     }
 }
 
@@ -138,5 +147,16 @@ const styles = StyleSheet.create({
         height: 65,
         fontSize: 15,
         color: '#161f3d'
+    },
+    splash:{
+        flex:1,
+        fontSize:50,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    splashText: {
+        color: 'darkslateblue',
+        fontWeight: 'bold',
+        fontSize: 30,
     },
 })

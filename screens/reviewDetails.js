@@ -12,6 +12,8 @@ export default function ReviewDetails({ navigation }) {
     Alert.alert('You are added to the queue. Your position is x.');
   };
 
+  
+
   return (
     <View style={globalStyles.container}>
     <Text>Current Queue size : 'from firebase'</Text>
