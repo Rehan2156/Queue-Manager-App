@@ -1,68 +1,57 @@
 Arguments: 
-  /home/laukik/.nvm/versions/node/v12.16.3/bin/node /home/laukik/.nvm/versions/node/v12.16.3/bin/yarnpkg add BatchedBridge
+  C:\Program Files\nodejs\node.exe C:\Users\Rehan\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add firebase@7.9.0
 
 PATH: 
-  /home/laukik/swift-5.2.3/usr/bin:/home/laukik/swift-5.2.3/usr/bin:/home/laukik/.nvm/versions/node/v12.16.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/laukik/Android/Sdk/emulator:/home/laukik/Android/Sdk/tools:/home/laukik/Android/Sdk/tools/bin:/home/laukik/Android/Sdk/platform-tools:/home/laukik/Android/Sdk/emulator:/home/laukik/Android/Sdk/tools:/home/laukik/Android/Sdk/tools/bin:/home/laukik/Android/Sdk/platform-tools
+  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\PuTTY\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk1.8.0_231\bin;C:\Users\Rehan\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\Rehan\AppData\Local\Programs\Python\Python38-32\;C:\Users\Rehan\AppData\Local\Microsoft\WindowsApps;;C:\Users\Rehan\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Rehan\AppData\Roaming\npm
 
 Yarn version: 
   1.22.4
 
 Node version: 
-  12.16.3
+  14.2.0
 
 Platform: 
-  linux x64
+  win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/BatchedBridge: Not found
-      at Request.params.callback [as _callback] (/home/laukik/.nvm/versions/node/v12.16.3/lib/node_modules/yarn/lib/cli.js:66987:18)
-      at Request.self.callback (/home/laukik/.nvm/versions/node/v12.16.3/lib/node_modules/yarn/lib/cli.js:140748:22)
-      at Request.emit (events.js:310:20)
-      at Request.<anonymous> (/home/laukik/.nvm/versions/node/v12.16.3/lib/node_modules/yarn/lib/cli.js:141720:10)
-      at Request.emit (events.js:310:20)
-      at IncomingMessage.<anonymous> (/home/laukik/.nvm/versions/node/v12.16.3/lib/node_modules/yarn/lib/cli.js:141642:12)
-      at Object.onceWrapper (events.js:416:28)
-      at IncomingMessage.emit (events.js:322:22)
-      at endReadableNT (_stream_readable.js:1187:12)
-      at processTicksAndRejections (internal/process/task_queues.js:84:21)
+  Error: EPERM: operation not permitted, unlink 'D:\React\ReactNativeDemo\node_modules\@expo\xdl\binaries\windows\adb\AdbWinApi.dll'
 
 npm manifest: 
   {
-    "main": "node_modules/expo/AppEntry.js",
-    "scripts": {
-      "start": "expo start",
-      "android": "expo start --android",
-      "ios": "expo start --ios",
-      "web": "expo start --web",
-      "eject": "expo eject"
-    },
-    "dependencies": {
-      "@react-native-community/masked-view": "^0.1.6",
-      "@react-navigation/native": "^5.3.0",
-      "expo": "^37.0.11",
-      "expo-google-app-auth": "^8.1.0",
-      "firebase": "7.9.0",
-      "react": "~16.9.0",
-      "react-dom": "~16.9.0",
-      "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
-      "react-native-dropdown-autocomplete": "^1.0.18",
-      "react-native-elements": "^2.0.0",
-      "react-native-gesture-handler": "~1.6.0",
-      "react-native-reanimated": "~1.7.0",
-      "react-native-safe-area-context": "^0.7.3",
-      "react-native-screens": "~2.2.0",
-      "react-native-snap-carousel": "^3.9.0",
-      "react-native-web": "~0.11.7",
-      "react-navigation": "^4.3.9",
-      "react-navigation-drawer": "^2.4.13",
-      "react-navigation-stack": "^2.5.0"
-    },
-    "devDependencies": {
-      "@babel/core": "^7.8.6",
-      "babel-preset-expo": "~8.1.0"
-    },
-    "private": true
-  }
+      "main": "node_modules/expo/AppEntry.js",
+      "scripts": {
+        "start": "expo start",
+        "android": "expo start --android",
+        "ios": "expo start --ios",
+        "web": "expo start --web",
+        "eject": "expo eject"
+      },
+      "dependencies": {
+        "@react-native-community/masked-view": "^0.1.6",
+        "@react-navigation/native": "^5.3.0",
+        "expo": "^37.0.10",
+        "firebase": "7.9.0",
+        "react": "~16.9.0",
+        "react-dom": "~16.9.0",
+        "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
+        "react-native-dropdown-autocomplete": "^1.0.18",
+        "react-native-elements": "^2.0.0",
+        "react-native-gesture-handler": "~1.6.0",
+        "react-native-reanimated": "~1.7.0",
+        "react-native-safe-area-context": "^0.7.3",
+        "react-native-screens": "~2.2.0",
+        "react-native-snap-carousel": "^3.9.0",
+        "react-native-web": "~0.11.7",
+        "react-navigation": "^4.3.9",
+        "react-navigation-drawer": "^2.4.13",
+        "react-navigation-stack": "^2.5.0"
+      },
+      "devDependencies": {
+        "@babel/core": "^7.8.6",
+        "babel-preset-expo": "~8.1.0"
+      },
+      "private": true
+    }
 
 yarn manifest: 
   No manifest
@@ -2806,6 +2795,8 @@ Lockfile:
       snapdragon "^0.8.1"
       to-regex "^3.0.1"
   
+<<<<<<< HEAD
+=======
   expo-app-auth@~9.0.0:
     version "9.0.0"
     resolved "https://registry.yarnpkg.com/expo-app-auth/-/expo-app-auth-9.0.0.tgz#879893b90bb083acd705012495bc907cd5d700e7"
@@ -2813,6 +2804,7 @@ Lockfile:
     dependencies:
       invariant "^2.2.4"
   
+>>>>>>> 76173303b014f483fd288fac41519d385b1bbc8f
   expo-asset@~8.1.5:
     version "8.1.5"
     resolved "https://registry.yarnpkg.com/expo-asset/-/expo-asset-8.1.5.tgz#6d0e3504cd719e9b888d32978d419d6522eed799"
@@ -2849,6 +2841,8 @@ Lockfile:
       fbjs "1.0.0"
       fontfaceobserver "^2.1.0"
   
+<<<<<<< HEAD
+=======
   expo-google-app-auth@^8.1.0:
     version "8.1.0"
     resolved "https://registry.yarnpkg.com/expo-google-app-auth/-/expo-google-app-auth-8.1.0.tgz#2f173cdd47733311ccdae911a1a6c74963a3593b"
@@ -2857,6 +2851,7 @@ Lockfile:
       expo-app-auth "~9.0.0"
       expo-constants "~9.0.0"
   
+>>>>>>> 76173303b014f483fd288fac41519d385b1bbc8f
   expo-keep-awake@~8.1.0:
     version "8.1.0"
     resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-8.1.0.tgz#3a1d8aa5a8395d40c7d79e1c93020ae5f848e664"
@@ -2904,10 +2899,17 @@ Lockfile:
     dependencies:
       compare-urls "^2.0.0"
   
+<<<<<<< HEAD
+  expo@^37.0.10:
+    version "37.0.10"
+    resolved "https://registry.yarnpkg.com/expo/-/expo-37.0.10.tgz#2aa3b2286a5ce0e40584298c61d807a347591c59"
+    integrity sha512-QffyIdYR8sPD9u/ouaft/vtLXeEOhtC7/vVwg/gdEWLeK7RXYfQPLI2Iaa265Vz6Lfv9x2LlmO5PrNc8sD+A7w==
+=======
   expo@^37.0.11:
     version "37.0.11"
     resolved "https://registry.yarnpkg.com/expo/-/expo-37.0.11.tgz#f7e1838941d40ea5ccb6ab01301f103ddee5ffe7"
     integrity sha512-O9rpK/tgProp8E1IkmxcAut0zySNVOfpb8+hzYsOUegFO3r7m8H4kYFXZULTwekMSAmnBxX0+qmzELRxlmKxHQ==
+>>>>>>> 76173303b014f483fd288fac41519d385b1bbc8f
     dependencies:
       "@babel/runtime" "^7.1.2"
       "@expo/vector-icons" "^10.0.2"
