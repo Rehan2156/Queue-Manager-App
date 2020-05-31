@@ -50,14 +50,18 @@ export default class Register extends Component {
             />
 
             <TouchableOpacity style={styles.myBtn} 
-                onPress = {() => EmailSi.handSignUp(this.state.name, this.state.email, this.state.password)}
+                onPress = {() => { 
+                  EmailSi.handSignUp(this.state.name, this.state.email, this.state.password)
+                }}
             >
               <Text style={styles.btnText}> Sign Up </Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.myBtn} 
-              onPress = {() =>   GoogleSi.signInOnPress()}
+              onPress = {async () =>   {
+                await GoogleSi.signInOnPress()
+              }}
             >
               <Text style={styles.btnText} > Sign Up With Google </Text>
             </TouchableOpacity>

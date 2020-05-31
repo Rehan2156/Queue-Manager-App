@@ -3,6 +3,7 @@ import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import MainRoute from './routes/MainRoute';
 import * as firebase from 'firebase';
+import PhoneNumVeriScreen from './screens/PhoneNumVeriScreen';
 // import firebaseConfig from './config';
 
 const firebaseConfig = {
@@ -28,7 +29,6 @@ const getFonts = () => Font.loadAsync({
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-
   if (fontsLoaded) {
     return (
       <MainRoute />
