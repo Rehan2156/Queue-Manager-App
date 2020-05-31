@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList,Linking } from 'react-native';
-import { globalStyles } from '../styles/global';
-import Card from '../shared/card';
-import Search from '../components/searchBar';
+import { globalStyles } from '../../../styles/global';
+import Card from '../../../shared/card';
+import Search from '../../../components/searchBar';
 import { MaterialIcons } from '@expo/vector-icons';
 
 
