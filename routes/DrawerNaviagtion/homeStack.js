@@ -1,11 +1,9 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import React from 'react';
-import Header from '../shared/header';
-import Home from '../screens/home';
-import ReviewDetails from '../screens/reviewDetails';
-import Account from '../screens/account';
-import UserQ from '../screens/userQ';
-
+import Header from '../../shared/header';
+import Home from '../../screens/User/Customer/home';
+import Account from '../../screens/User/Customer/account';
+import UserQ from '../../screens/User/Customer/userQ';
 
 const screens = {
 

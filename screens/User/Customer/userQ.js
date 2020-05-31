@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text,TouchableOpacity,Alert,Button } from 'react-native';
-import { globalStyles } from '../styles/global';
-import Card from '../shared/card';
+import { globalStyles } from '../../../styles/global';
+import Card from '../../../shared/card';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as firebase from 'firebase'
 
@@ -51,8 +51,7 @@ export default class UserQ extends Component {
       var userId = firebase.auth().currentUser.uid;
       const shopName =  this.props.navigation.getParam('shopName') 
       //function to handle click on floating Action Button
-      console.log('in clickhandler')
-      const inQadd = this.state.inQ?-1:1;
+      // const inQadd = this.state.inQ?-1:1;
       
       if(!this.state.inQ){
 
@@ -75,10 +74,9 @@ export default class UserQ extends Component {
       }).catch((error)=>{
         console.log(error);
       });
-      console.log('queue is '+this.state.queue)
+      // console.log('queue is '+this.state.queue)
     }
     else{
-      console.log('here')
       firebase.database().ref('/queueShop/'+shopName).update({
         qSize:this.state.queue - 1,
       })
@@ -86,7 +84,7 @@ export default class UserQ extends Component {
       this.setState(prevState=>
         ({inQ:!prevState.inQ})
         )
-        console.log('state in else is '+this.state.queue)
+        // console.log('state in else is '+this.state.queue)
 
     }
 
