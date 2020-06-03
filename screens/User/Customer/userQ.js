@@ -2,10 +2,9 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text,TouchableOpacity,Alert,Button } from 'react-native';
 import { globalStyles } from '../../../styles/global';
 import Card from '../../../shared/card';
-import { MaterialIcons } from '@expo/vector-icons';
 import * as firebase from 'firebase'
-
 console.ignoredYellowBox = ['Setting a timer'];
+
 export default class UserQ extends Component {
     constructor(props) {
       super(props);
@@ -23,14 +22,7 @@ export default class UserQ extends Component {
 
      componentDidMount() {
       console.log('component mounted')
-      // firebase.database().ref('/queueShop').push({
-      //   qSize:6,
-      //   name:'shop'
-      // }).then(()=>{
-      //   console.log('Inserted')
-      // }).catch((error)=>{
-      //   console.log(error);
-      // });
+
       const shopName= this.props.navigation.getParam('shopName') 
       firebase.database().ref('/queueShop/'+shopName+'/qSize').on('value', querySnapShot => {
         let data = querySnapShot.val() ? querySnapShot.val() : {};
@@ -40,9 +32,7 @@ export default class UserQ extends Component {
         });
         console.log('data is ',data)
       });
-      
       console.log('end of component mount')
-      
     }
 
     
@@ -50,18 +40,12 @@ export default class UserQ extends Component {
      clickHandler = () => {
       var userId = firebase.auth().currentUser.uid;
       const shopName =  this.props.navigation.getParam('shopName') 
-      //function to handle click on floating Action Button
-      // const inQadd = this.state.inQ?-1:1;
       
       if(!this.state.inQ){
 
       firebase.database().ref('/queueShop/'+shopName).update({
         qSize:this.state.queue + 1,
       })
-
-      // this.setState({
-      //   queue:this.state.queue,
-      // })
 
       firebase.database().ref('queueShop/'+shopName+'/line/'+userId).push({  
         username:this.state.user,
@@ -74,7 +58,6 @@ export default class UserQ extends Component {
       }).catch((error)=>{
         console.log(error);
       });
-      // console.log('queue is '+this.state.queue)
     }
     else{
       firebase.database().ref('/queueShop/'+shopName).update({
@@ -84,8 +67,6 @@ export default class UserQ extends Component {
       this.setState(prevState=>
         ({inQ:!prevState.inQ})
         )
-        // console.log('state in else is '+this.state.queue)
-
     }
 
       this.state.inQ?Alert.alert('You have exited the queue.'):Alert.alert('You are added to the queue.');
@@ -108,47 +89,12 @@ export default class UserQ extends Component {
         <Text style={styles.textStyle}>People in Queue : <Text style={styles.bold}>{this.state.queue}</Text></Text>
         {this.state.inQ?(<Text style={styles.textStyle}>{this.state.user} your token number is <Text style={styles.bold}>{this.state.userToken}</Text></Text>):(null)}
         <Button onPress={this.clickHandler} title={inQbutton}/>
-  
-        {/* <TouchableOpacity style={styles.icon}>
-      <MaterialIcons onPress={this.clickHandler} name='add' size={28}  style={styles.drawer} />
-    </TouchableOpacity> */}
       </View>
     );
   }
   }
   
   const styles = StyleSheet.create({
-    // TouchableOpacityStyle: {
-    //   position: 'absolute',
-    //   width: 50,
-    //   height: 50,
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
-    //   right: 30,
-    //   bottom: 30,
-    // },
-  
-    // FloatingButtonStyle: {
-    //   resizeMode: 'contain',
-    //   width: 50,
-    //   height: 50,
-    //   //backgroundColor:'black'
-    // },
-  
-    // icon:{
-    //   borderWidth:1,
-    //   borderColor:'rgba(0,0,0,0.2)',
-    //   alignItems:'center',
-    //   justifyContent:'center',
-    //   width:70,
-    //   position: 'absolute',                                          
-    //   bottom: 10,                                                    
-    //   right: 10,
-    //   height:70,
-    //   backgroundColor:'#58D68D',
-    //   borderRadius:100,
-    // }
-
 
     textStyle:{
        padding:20,
