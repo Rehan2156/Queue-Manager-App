@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text,TouchableOpacity,Alert,Button } from 'react-native';
+import { StyleSheet, View, Text,TouchableOpacity,Alert,Button, ActivityIndicator } from 'react-native';
 import { globalStyles } from '../../../styles/global';
 import Card from '../../../shared/card';
 import * as firebase from 'firebase'
@@ -15,7 +15,7 @@ export default class UserQ extends Component {
         readError: null,
         writeError: null,
         userToken:0,
-
+        isReady: false,
       };
 
     }
@@ -32,7 +32,7 @@ export default class UserQ extends Component {
         });
         console.log('data is ',data)
       });
-      console.log('end of component mount')
+      this.setState({ isReady: true })
     }
 
     
@@ -77,6 +77,11 @@ export default class UserQ extends Component {
     var inQbutton = this.state.inQ?"Exit the queue":"Join the queue";
     console.log('inQ :',this.state.inQ)
     console.log('button  :',inQbutton)
+
+    if(!this.state.isReady) {
+      return <ActivityIndicator  size='large' />
+    }
+
     return (
       <View style={globalStyles.container}>
         <Card>
