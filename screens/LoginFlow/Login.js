@@ -40,14 +40,18 @@ export default class Login extends Component {
                 />
 
                 <TouchableOpacity style={styles.myBtn} 
-                onPress = {() => EmailSi.handSignIn(this.state.email, this.state.password)}
+                onPress = {() => {
+                  EmailSi.handSignIn(this.state.email, this.state.password) 
+                }}
                 >
                   <Text style={styles.btnText}> Sign In </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
                   style={styles.myBtn} 
-                  onPress = {() =>   GoogleSi.signInOnPress()}
+                  onPress = {async () => {
+                      await GoogleSi.signInOnPress()
+                  }}
                 >
                   <Text style={styles.btnText} > Sign In With Google </Text>
                 </TouchableOpacity>

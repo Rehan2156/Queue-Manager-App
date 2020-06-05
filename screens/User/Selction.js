@@ -5,6 +5,23 @@ import * as firebase from 'firebase'
 
 export default class Selction extends Component {
 
+    componentDidMount() {
+        var myJSON
+        firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function (snapshot) {
+            myJSON = snapshot.toJSON()
+        })
+        .then(() => this.phoneNumberCheck(myJSON))
+    }
+
+    phoneNumberCheck = async (myJSON) => {
+        if( myJSON.verified_phone_no === undefined ) {
+            console.log('Yo!!!')
+            this.props.navigation.navigate('PhoneVeri')
+        } else {         
+            console.log('Verified Number is There')
+        }
+    }
+
     sendDataToDatabase = async ( type ) => {
         await firebase
             .database()
