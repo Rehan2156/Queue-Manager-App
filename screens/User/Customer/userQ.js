@@ -16,7 +16,7 @@ export default class UserQ extends Component {
         readError: null,
         writeError: null,
         userToken:0,
-
+        loading:false
       };
 
     }
@@ -96,6 +96,7 @@ export default class UserQ extends Component {
     var inQbutton = this.state.inQ?"Exit the queue":"Join the queue";
     console.log('inQ :',this.state.inQ)
     console.log('button  :',inQbutton)
+    if(!this.state.loading){
     return (
       <View style={globalStyles.container}>
         <Card>
@@ -114,6 +115,14 @@ export default class UserQ extends Component {
     </TouchableOpacity> */}
       </View>
     );
+  }else{
+    return(
+      <View style={globalStyles.loading}>
+        <Text> Loading Please Wait ... </Text>
+          <ActivityIndicator size = 'large' />
+      </View>
+    )
+  }
   }
   }
   

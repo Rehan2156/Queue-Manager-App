@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View, ActivityIndicator } from 'react-native'
 import { TouchableOpacity, TextInput } from 'react-native-gesture-handler'
 import GoogleSignIn from '../../methods/GoogleSignInMethod'
 import EmailSignIn from '../../methods/EmailSignInMethod'
@@ -11,7 +11,9 @@ export default class Login extends Component {
 
   state = {
     email: "",
-    password: ""
+    password: "",
+    loading:false,
+    error:""
   }
 
   constructor(props) {
@@ -20,10 +22,33 @@ export default class Login extends Component {
     EmailSi = new EmailSignIn();
   }
 
+
+  
+
+handSignIn = async (email, password) => {
+  this.setState({loading:true,error:""})
+    await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          this.setState({loading:false})
+            firebase
+                .database()
+                .ref('/users/' + userCredential.user.uid)
+                .update({
+                    last_logged_in: Date.now()
+                }).then(() => {
+                    Alert.alert('Information','User is Successfully Signed In')
+                })
+        })
+        .catch(error => {console.log(error),this.setState({error:error}), this.setState({loading:false})})
+ }
+
     render() {
+      if(!this.state.loading){
         return (
             <View style={styles.container}>
-
+                <Text>{this.state.error}</Text>
                 <Text style={styles.myLabel}> Email </Text>
                 <TextInput style={styles.myInput} 
                    autoCapitalize='none'
@@ -40,7 +65,7 @@ export default class Login extends Component {
                 />
 
                 <TouchableOpacity style={styles.myBtn} 
-                onPress = {() => EmailSi.handSignIn(this.state.email, this.state.password)}
+                onPress = {() => {this.setState({loading:true}),EmailSi.handSignIn(this.state.email, this.state.password)}}
                 >
                   <Text style={styles.btnText}> Sign In </Text>
                 </TouchableOpacity>
@@ -58,10 +83,24 @@ export default class Login extends Component {
 
             </View>
         )
+      }else{
+        return(
+          <View style={styles.loading}>
+            <Text> Loading Please Wait ... </Text>
+              <ActivityIndicator size = 'large' />
+          </View>
+        )
+      }
     }
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -112,4 +151,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
   },
+  splash:{
+    flex:1,
+    fontSize:50,
+    justifyContent:'center',
+    alignItems:'center'
+},
+splashText: {
+    color: 'darkslateblue',
+    fontWeight: 'bold',
+    fontSize: 30,
+},
 })

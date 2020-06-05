@@ -12,7 +12,8 @@ export default class Register extends Component {
     state = {
         name: "",
         email: "",
-        password: ""
+        password: "",
+        loading:false
     }
 
   constructor(props) {
@@ -21,7 +22,33 @@ export default class Register extends Component {
     EmailSi = new EmailSignIn();
   }
 
+  handSignUp = async (name, email, password) => {
+    console.log('pressed email sign in')
+    this.setState({loading:true})
+    await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            console.log("In Sign Up")
+            this.setState({loading:false})
+            firebase
+            .database()
+            .ref('/users/' + userCredential.user.uid)
+            .set({
+                gmail: email,
+                profile_picture: "",
+                Full_name: name,
+                created_at: Date.now()
+            })
+            .then(function(snapshot) {                
+                Alert.alert('Information','User is Successfully Signed Up')
+            });
+        })
+        .catch(error => {console.log(error); this.setState({loading:false})})
+}
+
     render() {
+      if(!this.state.loading){
         return (
             <View style={styles.container}>
 
@@ -50,7 +77,7 @@ export default class Register extends Component {
             />
 
             <TouchableOpacity style={styles.myBtn} 
-                onPress = {() => EmailSi.handSignUp(this.state.name, this.state.email, this.state.password)}
+                onPress = {() => {this.setState({loading:true}),EmailSi.handSignUp(this.state.name, this.state.email, this.state.password)}}
             >
               <Text style={styles.btnText}> Sign Up </Text>
             </TouchableOpacity>
@@ -64,10 +91,25 @@ export default class Register extends Component {
 
         </View>
         )
+      }else{
+        return(
+          <View style={styles.loading}>
+                <ActivityIndicator 
+                    size='large'
+                />
+            </View>
+        )
+      }
     }
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
     container: {
       flex: 1,
       backgroundColor: '#fff',
@@ -103,5 +145,16 @@ const styles = StyleSheet.create({
       fontSize: 20,
       color: 'white',
     },  
+    splash:{
+      flex:1,
+      fontSize:50,
+      justifyContent:'center',
+      alignItems:'center'
+  },
+  splashText: {
+      color: 'darkslateblue',
+      fontWeight: 'bold',
+      fontSize: 30,
+  },
   })
   

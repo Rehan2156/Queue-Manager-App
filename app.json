@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "QueT",
-    "slug": "locations",
+    "name": "splashScreen",
+    "slug": "splashscreen",
     "platforms": [
       "ios",
       "android",
@@ -24,7 +24,6 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": "",
-    "githubUrl": "https://github.com/leo13200006/Quet"
+    "description": ""
   }
 }

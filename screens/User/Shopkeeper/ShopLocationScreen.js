@@ -8,7 +8,7 @@ import MapView, { Marker } from 'react-native-maps';
 export default class ShopLocationScreen extends Component {
 
     state = {
-        loaction: null,
+        location: null,
         newLoc: null,
         errMsg: null,
     }
@@ -20,7 +20,7 @@ export default class ShopLocationScreen extends Component {
             this.props.setState({errMsg: 'Permission to access location was denied'})
         }    
         var location = await Location.getCurrentPositionAsync({})
-        this.setState({loaction: location.coords, newLoc: location.coords})
+        this.setState({location: location.coords, newLoc: location.coords})
     }
 
     constructor(props) {
@@ -34,7 +34,7 @@ export default class ShopLocationScreen extends Component {
             .database()
             .ref('/shop/' + firebase.auth().currentUser.uid)
             .update({
-                location_of_shop: this.state.loaction
+                location_of_shop: this.state.location
             })
             .then(() => {                
                 Alert.alert('Information','User Data is Uploaded')
@@ -46,7 +46,7 @@ export default class ShopLocationScreen extends Component {
         console.log('hello')
         var loc = this.state.newLoc
         this.setState({
-            loaction: loc
+            location: loc
         })
     }
 
@@ -60,13 +60,13 @@ export default class ShopLocationScreen extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.Header}>Location Of The Shop </Text>    
-                   { this.state.loaction && <MapView 
+                   { this.state.location && <MapView 
                         style={styles.mapStyle} 
                         initialRegion={{
                             latitudeDelta: 1.3,
                             longitudeDelta: 1.0,
-                            longitude: this.state.loaction.longitude,
-                            latitude: this.state.loaction.latitude
+                            longitude: this.state.location.longitude,
+                            latitude: this.state.location.latitude
                         }}
                         onRegionChange={this.onRegionChange}
                         zoomControlEnabled
@@ -78,7 +78,7 @@ export default class ShopLocationScreen extends Component {
                         /> }
 
                         <Marker
-                            coordinate={this.state.loaction}
+                            coordinate={this.state.location}
                             title="You are Here"
                         />
 
