@@ -4,7 +4,7 @@ import * as firebase from 'firebase'
 
 export default class EmailSignInMethod {
 
-    handSignUp = async (name, email, password) => {
+    handSignUp = async(name, email, password) => {
         console.log('pressed email sign in')
         await firebase
             .auth()
@@ -12,22 +12,20 @@ export default class EmailSignInMethod {
             .then(userCredential => {
                 console.log("In Sign Up")
                 firebase
-                .database()
-                .ref('/users/' + userCredential.user.uid)
-                .set({
-                    gmail: email,
-                    profile_picture: "",
-                    Full_name: name,
-                    created_at: Date.now()
-                })
-                .then(function(snapshot) {                
-                    Alert.alert('Information','User is Successfully Signed Up')
-                });
+                    .database()
+                    .ref('/users/' + userCredential.user.uid)
+                    .update({
+                        Full_name: name,
+                        created_at: Date.now()
+                    })
+                    .then(function(snapshot) {
+                        Alert.alert('Information', 'User is Successfully Signed Up')
+                    });
             })
             .catch(error => console.log(error))
     }
 
-    handSignIn = async (email, password) => {
+    handSignIn = async(email, password) => {
         await firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
@@ -38,9 +36,9 @@ export default class EmailSignInMethod {
                     .update({
                         last_logged_in: Date.now()
                     }).then(() => {
-                        Alert.alert('Information','User is Successfully Signed In')
+                        Alert.alert('Information', 'User is Successfully Signed In')
                     })
             })
             .catch(error => console.log(error))
-     }
+    }
 }

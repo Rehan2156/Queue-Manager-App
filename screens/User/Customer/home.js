@@ -9,9 +9,9 @@ import { SearchBar } from 'react-native-elements';
 export default class Home extends Component {
 
   state = {
-    shops: [  { shopName: 'Reliance', waiting: 50, body: 'lorem ipsum', key: '1',location:'https://goo.gl/maps/hFuasuqSfLFua7816' },
-              { shopName: 'Star Super Market', waiting: 45, body: 'lorem ipsum', key: '2',location:'https://goo.gl/maps/LzBw6AYFSocewDdP7' },
-              { shopName: 'D Mart', waiting: 30, body: 'lorem ipsum', key: '3',location:'https://goo.gl/maps/wNTPKD9YXLhZGHnx5' },  
+    shops: [  { shopName: 'Reliance', waiting: 50, body: 'lorem ipsum', key: '1',location:'https://goo.gl/maps/hFuasuqSfLFua7816', loc: {latitude: 18.5489935167087, longitude: 73.91808914020658} },
+              { shopName: 'Star Super Market', waiting: 45, body: 'lorem ipsum', key: '2',location:'https://goo.gl/maps/LzBw6AYFSocewDdP7', loc: {latitude: 18.5489935167087, longitude: 73.91808914020658} },
+              { shopName: 'D Mart', waiting: 30, body: 'lorem ipsum', key: '3',location:'https://goo.gl/maps/wNTPKD9YXLhZGHnx5', loc: {latitude: 18.5489935167087, longitude: 73.91808914020658} },  
            ],
 
     tempArray: [],
@@ -28,7 +28,7 @@ export default class Home extends Component {
       var ref = firebase.database().ref("/shop");
       ref.once("value", (snapshot) => {
         snapshot.forEach( (childSnapshot) => {
-          var key = childSnapshot.key.toString()
+          var key = childSnapshot.key
           var name = childSnapshot.child("/shop_name").val().toString()
           var category = childSnapshot.child("/Category_of_shop").val().toString()
           var lat = childSnapshot.child("/location_of_shop/latitude").val()
@@ -39,7 +39,12 @@ export default class Home extends Component {
             ios: `${scheme}${label}@${latLng}`,
             android: `${scheme}${latLng}(${label})`
           });
-          myArray = [...myArray, {shopName: name, body: 'we have to add this field', location: location, key: key, waiting: 10 }]
+
+            var loc = {
+              latitude : lat,
+              longitude: lon
+            }
+          myArray = [...myArray, {shopName: name, body: 'we have to add this field', location: location, key: key, waiting: 10, loc: loc }]
         })
           this.setState({
             shops: [...this.state.shops, ...myArray],
