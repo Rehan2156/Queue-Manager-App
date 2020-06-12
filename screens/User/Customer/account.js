@@ -23,7 +23,7 @@ export default class account extends Component {
     .then(() => {
         this.setState({
           fullName: myJSON.Full_Name,
-          gmail: myJSON.gmail,
+          gmail: myJSON.email,
           phoneNo: myJSON.verified_phone_no,
           isReady: true,
         })
@@ -37,12 +37,55 @@ export default class account extends Component {
       .ref('/users/' + firebase.auth().currentUser.uid)
       .update({
         Full_Name: this.state.fullName,
-        gmail: this.state.gmail,
+        email: this.state.gmail,
         verified_phone_no: this.state.phoneNo
       }).then(() => {
           Alert.alert('Data is Updated')
       })
       this.setState({ isReady: true })
+  }
+
+  wantToLogOut = async () => {
+    var inQ
+    await firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
+      inQ = snap.toJSON().inQ
+    })
+
+    if(!inQ) {
+      firebase
+              .auth()
+              .signOut()
+              .then(() => {
+                console.log('Logged Out')
+              })
+    } else {
+      Alert.alert(
+        'Warning !!!',
+        'if you log out then you will removed from queue also',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          { text: 'OK', onPress: async () => { 
+                  await firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
+                      inQ: 0,
+                  })
+                  var shop
+                  await firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value' , snap => {
+                    shop = snap.toJSON().shopKey
+                  })
+                  await firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/shopKey').remove()
+                  this.setState({ inQ: 0 })
+                  await firebase.database().ref('shop/' + shop + '/line/' + firebase.auth().currentUser.uid).remove()
+                  firebase.auth().signOut().then(() => { console.log('Logged Out') })}                
+                },
+        ],
+        { cancelable: false }
+      );
+    }
+
   }
 
   render() {
@@ -55,14 +98,7 @@ export default class account extends Component {
       <View style={globalStyles.container}>
         <Button
           title='Log Out' 
-          onPress={() => {
-            firebase
-              .auth()
-              .signOut()
-              .then(() => {
-                console.log('Logged Out')
-              })
-          }}
+          onPress={this.wantToLogOut}
         />
 
         { !this.state.isWantToUpdate ?
@@ -73,7 +109,7 @@ export default class account extends Component {
               editable = {this.state.isWantToUpdate}
               onChangeText = {val => this.setState({ fullName: val })}
             />
-            <Text style={styles.myLabel}>Gmail </Text>
+            <Text style={styles.myLabel}>Email </Text>
             <TextInput style={styles.myInput} 
               value = {this.state.gmail}
               editable = {this.state.isWantToUpdate}

@@ -7,8 +7,6 @@ import firebaseConfig from './config';
 
 firebase.initializeApp(firebaseConfig)
 
-console.log(firebase)
-
 const getFonts = () => Font.loadAsync({
   'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
   'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),

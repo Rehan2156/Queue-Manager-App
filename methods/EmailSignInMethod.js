@@ -13,9 +13,10 @@ export default class EmailSignInMethod {
                 console.log("In Sign Up")
                 firebase
                     .database()
-                    .ref('/users/' + userCredential.user.uid)
-                    .update({
-                        Full_name: name,
+                    .ref('users/' + userCredential.user.uid)
+                    .set({
+                        email: email,
+                        Full_Name: name,
                         created_at: Date.now()
                     })
                     .then(function(snapshot) {
@@ -32,7 +33,7 @@ export default class EmailSignInMethod {
             .then(userCredential => {
                 firebase
                     .database()
-                    .ref('/users/' + userCredential.user.uid)
+                    .ref('users/' + userCredential.user.uid)
                     .update({
                         last_logged_in: Date.now()
                     }).then(() => {

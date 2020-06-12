@@ -31,10 +31,13 @@ export default class Home extends Component {
           var key = childSnapshot.key
           var name = childSnapshot.child("/shop_name").val().toString()
           var category = childSnapshot.child("/Category_of_shop").val().toString()
+
           var lat = childSnapshot.child("/location_of_shop/latitude").val()
           var lon = childSnapshot.child("/location_of_shop/longitude").val()
+
           var latLng = `${lat},${lon}`;
           var label = 'Shop Location';
+
           var location = Platform.select({
             ios: `${scheme}${label}@${latLng}`,
             android: `${scheme}${latLng}(${label})`
@@ -47,7 +50,7 @@ export default class Home extends Component {
           myArray = [...myArray, {shopName: name, body: 'we have to add this field', location: location, key: key, waiting: 10, loc: loc }]
         })
           this.setState({
-            shops: [...this.state.shops, ...myArray],
+            shops: [...myArray],
           })
 
           this.setState({
