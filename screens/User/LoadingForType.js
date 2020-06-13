@@ -9,15 +9,16 @@ export default class LoadingT extends Component {
     firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function (snapshot) {
         myJSON = snapshot.toJSON()
     })
-    .then(() => {
-        if(myJSON.userType ===undefined) {
-          this.props.navigation.navigate('Selection')
-       } else {         
-        this.props.navigation.navigate((myJSON.userType === "Shopkeeper") ? 'Shopkeeper' : 'Customer')
-       }
-      })
+    .then(() => this.userCheck(myJSON))
   }
 
+  userCheck = async (myJSON) => {
+    if(myJSON.userType === undefined) {
+      this.props.navigation.navigate('Selection')
+    } else {         
+      this.props.navigation.navigate((myJSON.userType === "Shopkeeper") ? 'Shopkeeper' : 'Customer')
+    }
+  }
 
     render() {
         return (

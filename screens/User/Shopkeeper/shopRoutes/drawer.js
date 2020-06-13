@@ -2,19 +2,20 @@ import * as React from 'react'
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createAppContainer } from 'react-navigation';
 import {Dimensions} from 'react-native'
+
 // stacks
-import HomeStack from './homeStack';
-import AboutStack from './aboutStack';
-import CustomSidebarMenu from '../../screens/User/Shopkeeper/shopRoutes/customSidebarMenu';
+import AboutStack from '../../../../routes/DrawerNaviagtion/aboutStack.js';
+import shopHomeStack from './shopHomeStack.js';
+import CustomSidebarMenu from './customSidebarMenu.js';
 
 // drawer navigation options
-const RootDrawerNavigator = createDrawerNavigator({
+const shopRootDrawerNavigator = createDrawerNavigator({
 
   Home: {
-    screen: HomeStack,
+    screen: shopHomeStack,
   },
   Account:{
-    screen:HomeStack,
+    screen:shopHomeStack,
   },
   About: {
     screen: AboutStack,
@@ -26,4 +27,4 @@ const RootDrawerNavigator = createDrawerNavigator({
 }
 );
 
-export default RootDrawerNavigator
+export default shopRootDrawerNavigator

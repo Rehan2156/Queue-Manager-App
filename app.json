@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "splashScreen",
-    "slug": "splashscreen",
+    "name": "UIhogayakadak",
+    "slug": "uihogayakadak",
     "platforms": [
       "ios",
       "android",

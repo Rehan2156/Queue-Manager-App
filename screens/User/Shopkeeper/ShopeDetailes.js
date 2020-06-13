@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import { Text, StyleSheet, View, Picker, Dimensions, Alert } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import * as firebase from 'firebase'
+import { globalStyles } from '../../../styles/global'
+
+const {width:WIDTH}=Dimensions.get('window')
+
 
 export default class ShopeDetailes extends Component {
 
@@ -33,20 +37,25 @@ export default class ShopeDetailes extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={globalStyles.body}>
+            <View style={styles.box}>
                 <Text style={styles.Header}>Shopkeeper Details </Text>
-                <Text style={styles.label}>Name of The Shopkeeper </Text>
                 <TextInput 
                     style={styles.myInput}
                     onChangeText = {val => this.setState({name: val})}
                     selectedValue = {this.state.name}
+                    placeholder={'Name of The Shopkeeper'}
+                   placeholderTextColor={'rgba(255,255,255,0.7)'}
+                   underlineColorAndroid='transparent'
                 />
 
-                <Text style={styles.label}>Name of The Shop </Text>
                 <TextInput 
                     style={styles.myInput}
                     onChangeText = {val => this.setState({shopName: val})}
                     selectedValue = {this.state.shopName}
+                    placeholder={'Name of The Shop'}
+                   placeholderTextColor={'rgba(255,255,255,0.7)'}
+                   underlineColorAndroid='transparent'
                 />
 
                 <Text style={styles.label}>Category of the Shop </Text>
@@ -65,8 +74,9 @@ export default class ShopeDetailes extends Component {
                     style={styles.myBtnB}
                     onPress={this.uploadTheDeatils}
                 >
-                    <Text style={styles.label}> Next </Text>
+                    <Text style={{margin:5,fontFamily:'nunito-bold',}}> Next </Text>
                 </TouchableOpacity>
+            </View>
             </View>
         )
     }
@@ -82,18 +92,24 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 15,
-        color: '#555',
+        color: '#fff',
         margin: 5,
         padding: 10,
+        fontFamily:'nunito-bold',
     },
     myInput: {
-        fontSize: 13,
-        borderBottomColor: '#666',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderRadius: 15,
-        padding: 15,
-        margin: 5,
-    },
+        alignSelf:'center',
+        width: WIDTH - 90,
+        height:55,
+        borderRadius:45,
+        fontSize:16,
+        paddingLeft:45,
+        backgroundColor:'rgba(0,0,0,0.35)',
+        color:'rgba(255,255,255,0.7)',
+        marginHorizontal:25,
+        fontFamily:'nunito-bold',
+        margin:20
+      },
 
     myBtnA: {
         padding: 10,
@@ -111,7 +127,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#aaa',
         alignItems: 'center',
-        backgroundColor: '#def',
+        backgroundColor: '#fedbd0',
         marginTop: 30,
     },
 
@@ -120,5 +136,20 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         padding: 10,
         paddingBottom: 20,
+        fontFamily:'nunito-bold',
+        color:'#fff'
     },
+    box:{
+        padding:20,
+        margin:5,
+        marginTop:80,
+        backgroundColor:'#424242',
+        shadowOffset: { width: 5, height: 5 },
+        shadowColor: '#333',
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        // borderBottomEndRadius:15,
+        // borderTopLeftRadius:15,
+        elevation: 15,    
+    }
 })

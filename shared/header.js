@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerText: {
-    fontWeight: 'bold',
-    fontSize: 20,
+    fontFamily: 'Acme',
+    fontSize: 30,
     color: '#333',
     letterSpacing: 1,
   },

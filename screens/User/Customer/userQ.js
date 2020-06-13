@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text,TouchableOpacity,Alert,Button } from 'react-native';
+import { StyleSheet, View, Text,TouchableOpacity,Alert,Button, ActivityIndicator } from 'react-native';
 import { globalStyles } from '../../../styles/global';
 import Card from '../../../shared/card';
-import { MaterialIcons } from '@expo/vector-icons';
 import * as firebase from 'firebase'
+import { FontAwesome } from '@expo/vector-icons';
 
 console.ignoredYellowBox = ['Setting a timer'];
+
 export default class UserQ extends Component {
     constructor(props) {
       super(props);
@@ -16,21 +17,15 @@ export default class UserQ extends Component {
         readError: null,
         writeError: null,
         userToken:0,
-        loading:false
+        loading:false,
+        isReady: false,
       };
 
     }
 
      componentDidMount() {
       console.log('component mounted')
-      // firebase.database().ref('/queueShop').push({
-      //   qSize:6,
-      //   name:'shop'
-      // }).then(()=>{
-      //   console.log('Inserted')
-      // }).catch((error)=>{
-      //   console.log(error);
-      // });
+
       const shopName= this.props.navigation.getParam('shopName') 
       firebase.database().ref('/queueShop/'+shopName+'/qSize').on('value', querySnapShot => {
         let data = querySnapShot.val() ? querySnapShot.val() : {};
@@ -40,9 +35,7 @@ export default class UserQ extends Component {
         });
         console.log('data is ',data)
       });
-      
-      console.log('end of component mount')
-      
+      this.setState({ isReady: true })
     }
 
     
@@ -50,8 +43,6 @@ export default class UserQ extends Component {
      clickHandler = () => {
       var userId = firebase.auth().currentUser.uid;
       const shopName =  this.props.navigation.getParam('shopName') 
-      //function to handle click on floating Action Button
-      // const inQadd = this.state.inQ?-1:1;
       
       if(!this.state.inQ){
 
@@ -59,11 +50,7 @@ export default class UserQ extends Component {
         qSize:this.state.queue + 1,
       })
 
-      // this.setState({
-      //   queue:this.state.queue,
-      // })
-
-      firebase.database().ref('queueShop/'+shopName+'/line/'+userId).push({  
+      firebase.database().ref('queueShop/'+shopName+'/line/').push({  
         username:this.state.user,
         userToken:this.state.queue + 1,
       }).then(()=>{
@@ -74,7 +61,6 @@ export default class UserQ extends Component {
       }).catch((error)=>{
         console.log(error);
       });
-      // console.log('queue is '+this.state.queue)
     }
     else{
       firebase.database().ref('/queueShop/'+shopName).update({
@@ -84,8 +70,6 @@ export default class UserQ extends Component {
       this.setState(prevState=>
         ({inQ:!prevState.inQ})
         )
-        // console.log('state in else is '+this.state.queue)
-
     }
 
       this.state.inQ?Alert.alert('You have exited the queue.'):Alert.alert('You are added to the queue.');
@@ -97,8 +81,14 @@ export default class UserQ extends Component {
     console.log('inQ :',this.state.inQ)
     console.log('button  :',inQbutton)
     if(!this.state.loading){
+
+    if(!this.state.isReady) {
+      return <ActivityIndicator  size='large' />
+    }
+
     return (
-      <View style={globalStyles.container}>
+      <View style={globalStyles.body}>
+      <View style={styles.box}>
         <Card>
           <Text style={globalStyles.titleText}>
             { this.props.navigation.getParam('shopName') }
@@ -106,13 +96,19 @@ export default class UserQ extends Component {
           <Text>{ this.props.navigation.getParam('body') }</Text>
           <Text>{ this.props.navigation.getParam('waiting') } minutes waiting</Text>
         </Card>
-        <Text style={styles.textStyle}>People in Queue : <Text style={styles.bold}>{this.state.queue}</Text></Text>
-        {this.state.inQ?(<Text style={styles.textStyle}>{this.state.user} your token number is <Text style={styles.bold}>{this.state.userToken}</Text></Text>):(null)}
+        <Card><Text style={{fontFamily:'nunito-bold'}}> People in Queue : <Text style={styles.bold}>{this.state.queue}</Text></Text></Card>
         <Button onPress={this.clickHandler} title={inQbutton}/>
-  
-        {/* <TouchableOpacity style={styles.icon}>
-      <MaterialIcons onPress={this.clickHandler} name='add' size={28}  style={styles.drawer} />
-    </TouchableOpacity> */}
+        {this.state.inQ?(
+          <View>
+        <Text style={styles.tokentext}>Your token number</Text>
+        <Text style={styles.token}>{this.state.userToken}</Text>
+        <FontAwesome name="circle-o" style={styles.icon}/>
+        </View>
+        )
+        
+        :(null)}
+
+        </View>
       </View>
     );
   }else{
@@ -127,47 +123,49 @@ export default class UserQ extends Component {
   }
   
   const styles = StyleSheet.create({
-    // TouchableOpacityStyle: {
-    //   position: 'absolute',
-    //   width: 50,
-    //   height: 50,
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
-    //   right: 30,
-    //   bottom: 30,
-    // },
-  
-    // FloatingButtonStyle: {
-    //   resizeMode: 'contain',
-    //   width: 50,
-    //   height: 50,
-    //   //backgroundColor:'black'
-    // },
-  
-    // icon:{
-    //   borderWidth:1,
-    //   borderColor:'rgba(0,0,0,0.2)',
-    //   alignItems:'center',
-    //   justifyContent:'center',
-    //   width:70,
-    //   position: 'absolute',                                          
-    //   bottom: 10,                                                    
-    //   right: 10,
-    //   height:70,
-    //   backgroundColor:'#58D68D',
-    //   borderRadius:100,
-    // }
-
 
     textStyle:{
        padding:20,
        color:'#8D908E',
        backgroundColor:'#98F1BD'
       },
-
       bold:{
-        fontWeight:'bold'
-      }
-    
+        fontWeight:'bold',
+        fontSize:30
+      },
+
+      token:{
+        fontFamily:'nunito-bold',
+        position:'absolute',
+        fontSize:80,
+        marginTop:110,
+        marginLeft:100,
+        color:'#f9aa33'
+      },
+      tokentext:{
+        fontFamily:'nunito-bold',
+        fontSize:30,
+        color:'#fff',
+        marginTop:30
+      },
+      icon:{
+      textAlign:'center',
+      fontSize:200,
+      color:'#fff',
+      marginBottom:30
+      },
+      box:{
+        padding:20,
+        margin:5,
+        marginTop:10,
+        backgroundColor:'#424242',
+        shadowOffset: { width: 5, height: 5 },
+        shadowColor: '#333',
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        // borderBottomEndRadius:15,
+        // borderTopLeftRadius:15,
+        elevation: 15,    
+    }
     
   })

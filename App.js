@@ -3,18 +3,7 @@ import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import MainRoute from './routes/MainRoute';
 import * as firebase from 'firebase';
-// import firebaseConfig from './config';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAPH6oiGujFFxMBgcOloqfaCQ6HUZaHyNE",
-  authDomain: "lockscreen-963a0.firebaseapp.com",
-  databaseURL: "https://lockscreen-963a0.firebaseio.com",
-  projectId: "lockscreen-963a0",
-  storageBucket: "lockscreen-963a0.appspot.com",
-  messagingSenderId: "146232198529",
-  appId: "1:146232198529:web:c654528010e2b10687d480",
-  measurementId: "G-9NYMM82FZE"
-};
+import firebaseConfig from './config';
 
 
 firebase.initializeApp(firebaseConfig)
@@ -22,13 +11,15 @@ firebase.initializeApp(firebaseConfig)
 console.log(firebase)
 
 const getFonts = () => Font.loadAsync({
+  'Righteous': require('./assets/fonts/Righteous-Regular.ttf'),
+  'Acme': require('./assets/fonts/Acme-Regular.ttf'),
   'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
   'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
+  'Metal-Mania': require('./assets/fonts/MetalMania-Regular.ttf'),
 });
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-
   if (fontsLoaded) {
     return (
       <MainRoute />

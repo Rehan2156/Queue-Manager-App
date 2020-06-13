@@ -1,102 +1,155 @@
-import React, { useState,useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, FlatList,Linking,ScrollView } from 'react-native';
 import { globalStyles } from '../../../styles/global';
 import Card from '../../../shared/card';
-import Search from '../../../components/searchBar';
 import { MaterialIcons } from '@expo/vector-icons';
-import firebase from "firebase";
-// import { v1 as uuidv1 } from 'uuid';
+import * as firebase from 'firebase'
+import React, { Component } from 'react'
+import { StyleSheet, View, Text, TouchableOpacity, FlatList,Linking, ActivityIndicator } from 'react-native';
+import { SearchBar } from 'react-native-elements';
+import { color } from 'react-native-reanimated';
 
+export default class Home extends Component {
 
+  state = {
+    shops: [  { shopName: 'Reliance', waiting: 50, body: 'lorem ipsum', key: '1',location:'https://goo.gl/maps/hFuasuqSfLFua7816' },
+              { shopName: 'Star Super Market', waiting: 45, body: 'lorem ipsum', key: '2',location:'https://goo.gl/maps/LzBw6AYFSocewDdP7' },
+              { shopName: 'D Mart', waiting: 30, body: 'lorem ipsum', key: '3',location:'https://goo.gl/maps/wNTPKD9YXLhZGHnx5' },  
+           ],
 
-export default function Home({ navigation }) {
+    tempArray: [],
 
-  function create_UUID(){
-    var dt = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (dt + Math.random()*16)%16 | 0;
-        dt = Math.floor(dt/16);
-        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+    lisIsready: false,
+
+    textToBeSerach: '',
+  }
+
+  componentDidMount = () => {
+    var myArray = []
+    const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+    try {
+      var ref = firebase.database().ref("/shop");
+      ref.once("value", (snapshot) => {
+        snapshot.forEach( (childSnapshot) => {
+          var key = childSnapshot.key.toString()
+          var name = childSnapshot.child("/shop_name").val().toString()
+          var category = childSnapshot.child("/Category_of_shop").val().toString()
+          var lat = childSnapshot.child("/location_of_shop/latitude").val()
+          var lon = childSnapshot.child("/location_of_shop/longitude").val()
+          var latLng = `${lat},${lon}`;
+          var label = 'Shop Location';
+          var location = Platform.select({
+            ios: `${scheme}${label}@${latLng}`,
+            android: `${scheme}${latLng}(${label})`
+          });
+          myArray = [...myArray, {shopName: name, body: 'we have to add this field', location: location, key: key, waiting: 10 }]
+        })
+          this.setState({
+            shops: [...this.state.shops, ...myArray],
+          })
+
+          this.setState({
+            tempArray: this.state.shops,
+            lisIsready: true,
+          })
+
+      })
+    } catch(e) {
+      console.log('Error: ', e)
+    }
+  }
+
+  searchFilterFunction = text => {    
+    const newData = this.state.shops.filter(item => {      
+      const itemData = `${item.shopName.toString().toUpperCase()}`;
+       const textData = text.toString().toUpperCase();
+       return itemData.indexOf(textData) > -1;    
     });
-    return uuid;
-}
+    
+    this.setState({ tempArray: newData });  
+  };
 
+  render() {
 
+    if(!this.state.lisIsready) {
+      return <ActivityIndicator  size='large' />
+    }
 
-  //  useEffect(() => {
-  //   console.log("component did mount");
-
-  //   var ref = firebase.database().ref("/shop");
-  //   ref.once("value")
-  //     .then(function(snapshot) {
-  //       snapshot.forEach(function(childSnapshot) {
-  //       var name = childSnapshot.child("/shop_name").val();
-  //       console.log("name mila ",name)
-  //       var category = childSnapshot.child("/Category_of_shop").val(); 
-  //       console.log("category mila ",category);
-  //       var shopKey = childSnapshot.child("/key").val(); 
-  //       console.log("key mila ",shopKey);
-  //       setShop( [...shops,
-  //         {shopName: name, categoryOfShop: category, body:'hi',waiting:50,location:'',key:shopKey}]);
-  //         console.log("shop data : ",shops);
-        
-  //       });
-  //     });
-
-
-  // });
-
-  const [shops, setShop] = useState([
-    { shopName: 'Reliance',categoryOfShop: "Super market", waiting: 50, body: 'lorem ipsum', key: '1',location:'https://goo.gl/maps/hFuasuqSfLFua7816' },
-    { shopName: 'Star Super Market',categoryOfShop: "Super market", waiting: 45, body: 'lorem ipsum', key: '2',location:'https://goo.gl/maps/LzBw6AYFSocewDdP7' },
-    { shopName: 'D Mart',categoryOfShop: "Super market", waiting: 30, body: 'lorem ipsum', key: '3',location:'https://goo.gl/maps/wNTPKD9YXLhZGHnx5' },
-  ]);
-
-  
-
-  return (
-      
-    <View style={globalStyles.container}>
-      <View><Search /></View>  
-      <View>
-      <Text style={styles.heading}>Most Recommended</Text>
-      
-      <FlatList data={shops} keyExtractor={(item)=>item.key.toString()} renderItem={({ item }) => (
-        <TouchableOpacity style={{backgroundColor:'#F4D03F', borderRadius:10}} onPress={() => navigation.navigate('ReviewDetails', item)}>
-          <Card>
-          <View style={styles.cardAlign}>
-          <View>
-            <Text style={globalStyles.titleText}>{ item.shopName }</Text>
-            <Text>Category : {item.categoryOfShop}</Text>
-          </View>  
-          <MaterialIcons onPress={ ()=> Linking.openURL(item.location) } name='navigation' size={35} /*onPress={openMenu}*/  />
-          </View>
-          </Card>
-        </TouchableOpacity>
-      )} />
+    return (
+        <View style={globalStyles.body}>
+        <View style={styles.input}>
+          <SearchBar        
+              placeholder="Search for stores..."        
+              lightTheme        
+              round        
+              onChangeText={text => {
+                this.setState({ textToBeSerach: text })
+                this.searchFilterFunction(text)
+              }}
+              autoCorrect={false}             
+              value = {this.state.textToBeSerach}
+          />    
+        </View>  
+        <View>
+        <Text style={styles.heading}>Shops using QueT</Text>
+        <FlatList data={this.state.tempArray} renderItem={({ item }) => (
+          <TouchableOpacity style={styles.touchable} onPress={() => this.props.navigation.navigate('ReviewDetails', item)}>
+            <Card>
+            <View style={styles.cardAlign}>
+            <View>
+              <Text style={globalStyles.titleText}>{ item.shopName }</Text>
+              <Text>Waiting time : {item.waiting} minutes</Text>
+            </View>  
+            <MaterialIcons onPress={ ()=> Linking.openURL(item.location) } name='navigation' size={35} />
+            </View>
+            </Card>
+          </TouchableOpacity>
+        )} 
+        contentContainerStyle={{ paddingBottom: 300}}
+        />
+        </View>
       </View>
-    </View>
-  );
+    )
+  }
 }
 
 const styles = StyleSheet.create({
-heading:{
-    textAlign:'center',
-    borderWidth:1,
-    padding:20,
-    margin:50,
-    fontSize:20,
-    borderRadius:30,
-    backgroundColor:'#AF7AC5',
-    fontFamily:'serif',
-    borderColor:'#AF7AC5',
+  body:{
+    backgroundColor:'#424242',
+    // padding:50,
+    // borderTopLeftRadius:150,
+    // flex:1,
+    // padding:20
+},
+    heading:{
+        textAlign:'center',
+        padding:20,
+        fontSize:25,
+        marginTop:10,
+        marginBottom:10,
+        fontFamily:'nunito-bold',
+        color:'#fff'
+    },
     
-},
+    cardAlign:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+    },
 
-cardAlign:{
-    flexDirection:'row',
-    justifyContent:'space-between'
-},
+    touchable:{
+      backgroundColor:'#F4D03F', borderRadius:10,marginTop:10,marginBottom:10,
+      elevation:20,
+      backgroundColor:'#424242',
+        shadowOffset: { width: 5, height: 5 },
+        shadowColor: '#333',
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+    },
+
+    input:{
+      paddingHorizontal:5,
+      paddingVertical:6
+    }
+
+  })
+  
 
 
-})

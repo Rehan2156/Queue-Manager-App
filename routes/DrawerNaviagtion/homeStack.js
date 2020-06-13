@@ -6,12 +6,12 @@ import Account from '../../screens/User/Customer/account';
 import UserQ from '../../screens/User/Customer/userQ';
 
 const screens = {
-
+  
   Home: {
     screen: Home,
     navigationOptions: ({ navigation }) => {
       return {
-        headerTitle: () => <Header title='QueT' navigation={navigation} />
+        headerTitle: () => <Header title='QueT' navigation={navigation}/>
       }
     },
   },
@@ -19,6 +19,7 @@ const screens = {
     screen: UserQ,
     navigationOptions: {
       title: 'Shop Details',
+
     }
   },
   Account: {
@@ -32,8 +33,8 @@ const screens = {
 // home stack navigator screens
 const HomeStack = createStackNavigator(screens, {
   defaultNavigationOptions: {
-    headerTintColor: '#444',
-    headerStyle: { backgroundColor: 'coral', height: 80,borderBottomLeftRadius:20,borderBottomRightRadius:20 }
+    // headerTintColor: '#444'
+    headerStyle: { backgroundColor: '#Fedbd0', height: 80 }
   }
 });
 

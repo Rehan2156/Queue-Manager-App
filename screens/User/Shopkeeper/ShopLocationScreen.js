@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import * as firebase from 'firebase'
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
+import { globalStyles } from '../../../styles/global';
 
 export default class ShopLocationScreen extends Component {
 
@@ -11,6 +12,7 @@ export default class ShopLocationScreen extends Component {
         location: null,
         newLoc: null,
         errMsg: null,
+        showUpload:false
     }
 
     getTheLocationAtFirst = async () => {
@@ -46,7 +48,8 @@ export default class ShopLocationScreen extends Component {
         console.log('hello')
         var loc = this.state.newLoc
         this.setState({
-            location: loc
+            location: loc,
+            showUpload:true
         })
     }
 
@@ -58,7 +61,7 @@ export default class ShopLocationScreen extends Component {
     
     render() {
         return (
-            <View style={styles.container}>
+            <View style={globalStyles.body}>
                 <Text style={styles.Header}>Location Of The Shop </Text>    
                    { this.state.location && <MapView 
                         style={styles.mapStyle} 
@@ -84,10 +87,11 @@ export default class ShopLocationScreen extends Component {
 
                     </MapView> }
 
-                    <TouchableOpacity style={styles.myBtnA} onPress={this.getTheLocation}>
+                    <TouchableOpacity style={styles.myBtnB} onPress={this.getTheLocation}>
                         <Text style={styles.label}>Click To Select Location </Text>
                     </TouchableOpacity>
 
+                    {this.state.showUpload?
                     <TouchableOpacity 
                         style={styles.myBtnB}
                         onPress = {() => {
@@ -96,6 +100,8 @@ export default class ShopLocationScreen extends Component {
                     >
                         <Text style={styles.label}>Upload </Text>
                     </TouchableOpacity>
+                    :null
+                    }
             </View>
         )
     }
@@ -114,6 +120,7 @@ const styles = StyleSheet.create({
         color: '#555',
         margin: 5,
         padding: 10,
+        fontFamily:'nunito-bold'
     },
     myInput: {
         fontSize: 13,
@@ -134,13 +141,13 @@ const styles = StyleSheet.create({
     },
 
     myBtnB: {
-        padding: 10,
-        margin: 7,
-        borderRadius: 17,
-        borderWidth: 2,
+        padding: 5,
+        margin: 3,
+        borderRadius: 30,
         borderColor: '#aaa',
         alignItems: 'center',
-        backgroundColor: '#def'
+        backgroundColor: '#fedbd0',
+        marginTop: 30,
     },
 
     Header: {
@@ -148,12 +155,15 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         padding: 10,
         paddingBottom: 20,
+        fontFamily:'nunito-bold',
+        color:'#fff'
     },
 
     mapStyle: {
-        padding: 0,
-        width: Dimensions.get('window').width-25,
+        margin:10,
+        width: Dimensions.get('window').width-60,
         height: 400,
+        elevation:12
       },
 
 })
