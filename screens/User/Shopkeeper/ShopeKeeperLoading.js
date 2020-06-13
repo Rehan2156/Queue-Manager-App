@@ -21,7 +21,7 @@ export default class ShopeKeeperLoading extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text> shop Loading </Text>
+                <Text> Shop Loading </Text>
                 <ActivityIndicator size = 'large' />
             </View>
         )
