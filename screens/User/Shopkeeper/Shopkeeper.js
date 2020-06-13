@@ -6,9 +6,6 @@ import Card from '../../../shared/card';
 import { globalStyles } from '../../../styles/global';
 import { FontAwesome } from '@expo/vector-icons';
 
-
-
-
 export default class Shopkeeper extends Component {
     
     constructor(){
