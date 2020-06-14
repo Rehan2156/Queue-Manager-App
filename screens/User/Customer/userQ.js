@@ -97,7 +97,7 @@ export default class UserQ extends Component {
               token = 1;
           } else {
               var bigNum = 0;
-              await firebase.database().ref('shop/' + shop + '/line/').once('value', function(snapshot){
+              await firebase.database().ref('shop/' + shop + '/line').once('value', function(snapshot){
                   if(snapshot.exists()){
                       snapshot.forEach(function(data){
                           var val = data.toJSON().Token;
@@ -163,7 +163,7 @@ export default class UserQ extends Component {
           <Text style={globalStyles.titleText}>
             { this.props.navigation.getParam('shopName') }
           </Text>
-          <Text>{ this.props.navigation.getParam('waiting') } minutes waiting</Text>
+          <Text>{ this.props.navigation.getParam('body') } </Text>
         </Card>
         <Card><Text style={{fontFamily:'nunito-bold'}}> People in Queue : <Text style={styles.bold}>{this.state.queue}</Text></Text></Card>
         <Button onPress={this.clickHandler} title={inQbutton}/>

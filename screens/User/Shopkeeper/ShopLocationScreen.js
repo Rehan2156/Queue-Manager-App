@@ -36,7 +36,11 @@ export default class ShopLocationScreen extends Component {
             .database()
             .ref('/shop/' + firebase.auth().currentUser.uid)
             .update({
-                location_of_shop: this.state.location
+                location_of_shop: this.state.location,
+                isOpen: 1,
+                qSize: 10,
+                time: 5,
+                line: {}
             })
             .then(() => {                
                 Alert.alert('Information','User Data is Uploaded')

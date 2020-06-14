@@ -1,32 +1,34 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, View, Button,TouchableOpacity, Dimensions, TextInput } from 'react-native'
 import * as firebase from 'firebase'
 import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../../shared/card';
 import { globalStyles } from '../../../styles/global';
 import { FontAwesome } from '@expo/vector-icons';
 
+
+const {width:WIDTH}=Dimensions.get('window')
+
+
 export default class Shopkeeper extends Component {
-    
     constructor(){
       super()
       this.state={
         customers:[
-            {name:'Rehan',token:99,key:1}
+            {name:'Rehan',token:13,key:1}
         ],
         shopName:"",
         tempArray:[],
-        isReady:false
+        isReady:false,
+        howMany: '0',
     }
-    }
+  }
 
-
-    componentDidMount = () => {
+    componentDidMount = async () => {
         var myArray = []
-
-        firebase
+        await firebase
         .database()
-        .ref('/shop/'+firebase.auth().currentUser.uid)
+        .ref('shop/'+firebase.auth().currentUser.uid)
         .on("value",(snapshot)=>{
             var shopName = snapshot.child("/shop_name").val().toString()
             console.log("shop name "+shopName)
@@ -34,41 +36,46 @@ export default class Shopkeeper extends Component {
                 shopName:shopName
             })
         })
-
         try {
             console.log("here")
             var myJSON
-          var ref = firebase.database().ref("/queueShop/Jessy Medical/line/");
-          ref.once("value", (snapshot) => {
-            
+          var ref = await firebase.database().ref("shop/" + firebase.auth().currentUser.uid + '/line');
+          await ref.on("value", (snapshot) => {
             snapshot.forEach( (childSnapshot) => {
-                console.log("cust name is ");
             myJSON = childSnapshot.toJSON()
-            console.log("myjson 0 is "+myJSON[0])
               var key = childSnapshot.key.toString()
-              var name = childSnapshot.child("/username").val().toString()
-              var token = childSnapshot.child("/userToken").val().toString()
+              var name = myJSON.Name
+              var token = myJSON.Token
               myArray = [...myArray, {name:name,token:token, key: key }]
             })
               this.setState({
                 customers: [...this.state.customers, ...myArray],
               })
-    
               this.setState({
                 tempArray: this.state.customers,
                 isReady: true,
               })
-    
           })
         } catch(e) {
           console.log('Error: ', e)
         }
-      }
-    
+    }
+
     render(){
         return (
           <View style={{backgroundColor:'#Fedbd0'}}>
             <View style={styles.body}>
+            <TextInput style={styles.myInput} 
+            value = {this.state.howMany}
+            placeholder = "Enter Number"
+            keyboardType = 'phone-pad'
+            onChangeText = {val => this.setState({ howMany: val })}
+                   placeholderTextColor={'rgba(255,255,255,0.7)'}
+                   underlineColorAndroid='transparent'
+          />
+           <TouchableOpacity style={styles.myBtn} onPress={ this.removeThem }>
+            <Text style={styles.myBtnText}>remove</Text>
+          </TouchableOpacity>
                 <Text style={styles.head}>People in queue</Text>
                 <FlatList data={this.state.tempArray} renderItem={({ item }) => (
                     <View>
@@ -89,7 +96,6 @@ export default class Shopkeeper extends Component {
             </View>
         )
     }
-    
 }
 
 const styles = StyleSheet.create({
@@ -146,5 +152,44 @@ const styles = StyleSheet.create({
       textAlign:'center',
       fontSize:20,
       color:'#8A8A87'
-    }
+    },
+
+  myBtn: {
+    width:WIDTH - 55,
+    alignSelf:'center',
+    height:55,
+    borderRadius:25,
+    backgroundColor:'#fedbd0',
+    justifyContent:'center',
+    marginTop:20,
+    marginHorizontal:25,
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    // borderBottomEndRadius:15,
+    // borderTopLeftRadius:15,
+    elevation: 3,
+  },
+  myBtnText: {
+    padding: 7,
+    margin: 5,
+    fontSize: 18,
+    alignSelf: 'center',
+    color: '#555',
+    fontWeight: 'bold'
+  },
+  myInput: {
+    alignSelf:'center',
+    width: WIDTH - 55,
+    height:55,
+    borderRadius:45,
+    fontSize:16,
+    paddingLeft:45,
+    backgroundColor:'rgba(0,0,0,0.35)',
+    color:'rgba(255,255,255,0.7)',
+    marginHorizontal:25,
+    fontFamily:'nunito-bold',
+    margin:20
+  },
 })

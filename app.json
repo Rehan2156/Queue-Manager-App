@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "UIhogayakadak",
-    "slug": "uihogayakadak",
+    "slug": "quet",
     "platforms": [
       "ios",
       "android",
@@ -21,6 +21,10 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "com.NativeNinjas.QueT",
+      "versionCode": 1
+    },
     "ios": {
       "supportsTablet": true
     },
