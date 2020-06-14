@@ -1,42 +1,58 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Alert, Dimensions } from 'react-native'
+import { Text, StyleSheet, View, Alert, Dimensions, ActivityIndicator } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import * as firebase from 'firebase'
-import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
+<<<<<<< HEAD
 import { globalStyles } from '../../../styles/global';
+=======
+import * as Location from 'expo-location';
+console.ignoredYellowBox = ['Setting a timer'];
+>>>>>>> ae6906241d68149a189b48b564cd42f544ab5259
 
 export default class ShopLocationScreen extends Component {
 
     state = {
         location: null,
         newLoc: null,
+<<<<<<< HEAD
         errMsg: null,
         showUpload:false
+=======
+        errMsg: "Yes",
+>>>>>>> ae6906241d68149a189b48b564cd42f544ab5259
     }
 
     getTheLocationAtFirst = async () => {
         console.log('location at first')
-        let { status } = await Location.requestPermissionsAsync();
-        if (status !== 'granted') {
-            this.props.setState({errMsg: 'Permission to access location was denied'})
-        }    
+        let { status } = Location.requestPermissionsAsync()
+            .then(() => {
+                if (status !== 'granted') {
+                    this.setState({errMsg: 'Permission to access location was denied'})
+                }   
+                Alert.alert(this.state.errMsg)
+            }) 
+
         var location = await Location.getCurrentPositionAsync({})
         this.setState({location: location.coords, newLoc: location.coords})
     }
 
-    constructor(props) {
-        super(props)
-        this.getTheLocationAtFirst()
-        .then(console.log('Constructor'))        
+    async componentDidMount() {
+        await this.getTheLocationAtFirst().then(() => {
+            console.log('location mila')
+        }) 
     }
 
     uploadTheDeatils = async () => {
         await firebase
             .database()
-            .ref('/shop/' + firebase.auth().currentUser.uid)
+            .ref('shop/' + firebase.auth().currentUser.uid)
             .update({
+<<<<<<< HEAD
                 location_of_shop: this.state.location,
+=======
+                location_of_shop: this.state.loaction,
+>>>>>>> ae6906241d68149a189b48b564cd42f544ab5259
                 isOpen: 1,
                 qSize: 10,
                 time: 5,
@@ -67,6 +83,7 @@ export default class ShopLocationScreen extends Component {
         return (
             <View style={globalStyles.body}>
                 <Text style={styles.Header}>Location Of The Shop </Text>    
+<<<<<<< HEAD
                    { this.state.location && <MapView 
                         style={styles.mapStyle} 
                         initialRegion={{
@@ -90,6 +107,33 @@ export default class ShopLocationScreen extends Component {
                         />
 
                     </MapView> }
+=======
+                    { this.state.location &&
+                        <MapView 
+                            style={styles.mapStyle} 
+                            initialRegion={{
+                                latitudeDelta: 1.3,
+                                longitudeDelta: 1.0,
+                                longitude: this.state.loaction.longitude,
+                                latitude: this.state.loaction.latitude
+                            }}
+                            onRegionChange={this.onRegionChange}
+                            zoomControlEnabled
+                        >
+                            { this.state.newLoc && <Marker
+                                pinColor='blue'
+                                coordinate={this.state.newLoc}
+                                title="You Want this place to select"
+                            /> }
+
+                            <Marker
+                                coordinate={this.state.loaction}
+                                title="You are Here"
+                            />
+
+                        </MapView> 
+                    }   
+>>>>>>> ae6906241d68149a189b48b564cd42f544ab5259
 
                     <TouchableOpacity style={styles.myBtnB} onPress={this.getTheLocation}>
                         <Text style={styles.label}>Click To Select Location </Text>

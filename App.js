@@ -8,8 +8,6 @@ import firebaseConfig from './config';
 
 firebase.initializeApp(firebaseConfig)
 
-console.log(firebase)
-
 const getFonts = () => Font.loadAsync({
   'Righteous': require('./assets/fonts/Righteous-Regular.ttf'),
   'Acme': require('./assets/fonts/Acme-Regular.ttf'),

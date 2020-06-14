@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+<<<<<<< HEAD
 import { Text, StyleSheet, View, Button,TouchableOpacity, Dimensions, TextInput } from 'react-native'
 import * as firebase from 'firebase'
 import { FlatList } from 'react-native-gesture-handler';
@@ -93,6 +94,95 @@ export default class Shopkeeper extends Component {
         contentContainerStyle={{ paddingBottom: 300}}
         />
             </View>
+=======
+import { Text, StyleSheet, View, Button, Alert } from 'react-native'
+import * as firebase from 'firebase'
+import { TextInput } from 'react-native-gesture-handler'
+
+export default class Shopkeeper extends Component {
+    
+    state = {
+        isOpen: 0,
+        body: "",
+    }
+
+    async componentDidMount() {
+        await firebase.database().ref('shop/' + firebase.auth().currentUser.uid).once('value' , snapshot => {
+            this.setState({
+                isOpen: snapshot.toJSON().isOpen, 
+            })
+        })
+
+        console.log(this.state.isOpen)
+    }
+
+    wantToClose = async () => {
+        await firebase.database().ref('shop/' + firebase.auth().currentUser.uid).update({
+            isOpen: 0
+        })
+        .then(() => {
+            firebase.database().ref('shop/' + firebase.auth().currentUser.uid + '/line').remove()
+            this.setState({ isOpen: 0 })
+        })
+        console.log('wantToClose')
+    }
+
+    wantToOpen = async () => {
+        await firebase.database().ref('shop/' + firebase.auth().currentUser.uid).update({
+            isOpen: 1
+        })
+        .then(() => {
+            firebase.database().ref('shop/' + firebase.auth().currentUser.uid).update({ 
+                line: {}
+             })
+            this.setState({ isOpen: 1 })
+        })
+        console.log('wantToOpen')
+    }
+
+    bodyUpdate = async () => {
+        if(this.state.body !== null && this.state.body !== "" && this.state.body !== undefined) {
+            await firebase.database().ref('shop/' + firebase.auth().currentUser.uid).update({
+                body: this.state.body
+             }).then(() => {
+                 Alert.alert('done')
+             })
+        }
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <Text> Shopkeeper </Text>
+                <Button
+                    title = "Log Out"
+                    onPress = {() => firebase.auth().signOut()} 
+                />
+                <Text>  </Text>
+                {
+                    this.state.isOpen ?  
+                    <Button
+                        title = "Close the Store " 
+                        onPress = { this.wantToClose }
+                    /> : 
+                    <Button
+                        title = "Open the Store " 
+                        onPress = { this.wantToOpen }
+                    />  
+                }
+
+                <Text> Body </Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder = "Write about your shop"
+                    value = {this.state.body}
+                    onChangeText = { val => this.setState({ body: val })}
+                />
+                <Button 
+                    title = "update Body"
+                    onPress = {this.bodyUpdate}
+                />
+>>>>>>> ae6906241d68149a189b48b564cd42f544ab5259
             </View>
         )
     }
@@ -106,6 +196,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+<<<<<<< HEAD
     head:{
         padding:15,
         fontWeight:'bold',
@@ -192,4 +283,15 @@ const styles = StyleSheet.create({
     fontFamily:'nunito-bold',
     margin:20
   },
+=======
+
+    input: {
+        width: '95%',
+        padding: 10,
+        margin: 10,
+        fontSize: 20,
+        borderColor: 'black',
+        borderWidth: 1,
+    }
+>>>>>>> ae6906241d68149a189b48b564cd42f544ab5259
 })

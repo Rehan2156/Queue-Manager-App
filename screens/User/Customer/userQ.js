@@ -118,7 +118,7 @@ export default class UserQ extends Component {
               this.setState({ inQ: 1 })
               var time = Math.round((Math.ceil(token / shopDetail.qSize)) * 10) ;
               await firebase.database().ref('shop/' + shop + '/line/' + userId).set({
-                      Name: userDetail.Full_Name,
+                      Name: userDetail.Full_ame,
                       Token: token,
                       Time_in_min: time
                   })
