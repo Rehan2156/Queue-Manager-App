@@ -85,18 +85,18 @@ export default class UserQ extends Component {
     if(!this.state.isReady) {
       return <ActivityIndicator  size='large' />
     }
-
+    var wait = this.state.queue * 2
     return (
       <View style={globalStyles.body}>
       <View style={styles.box}>
         <Card>
-          <Text style={globalStyles.titleText}>
+          <Text style={styles.titleText}>
             { this.props.navigation.getParam('shopName') }
           </Text>
-          <Text>{ this.props.navigation.getParam('body') }</Text>
-          <Text>{ this.props.navigation.getParam('waiting') } minutes waiting</Text>
+          <Text style={styles.waitingText}>{ this.props.navigation.getParam('body') }</Text>
+          <Text style={styles.waitingText}>{wait} minutes waiting</Text>
         </Card>
-        <Card><Text style={{fontFamily:'nunito-bold'}}> People in Queue : <Text style={styles.bold}>{this.state.queue}</Text></Text></Card>
+        <Card><Text style={{fontFamily:'nunito-bold',fontSize:20}}> People in Queue : <Text style={styles.bold}>{this.state.queue}</Text></Text></Card>
         <Button onPress={this.clickHandler} title={inQbutton}/>
         {this.state.inQ?(
           <View>
@@ -155,7 +155,7 @@ export default class UserQ extends Component {
       marginBottom:30
       },
       box:{
-        padding:20,
+        padding:10,
         margin:5,
         marginTop:10,
         backgroundColor:'#424242',
@@ -166,6 +166,13 @@ export default class UserQ extends Component {
         // borderBottomEndRadius:15,
         // borderTopLeftRadius:15,
         elevation: 15,    
+    },
+    titleText:{
+      fontFamily:'nunito-bold',
+      fontSize:25
+    },
+    waitingText:{
+      fontFamily:'nunito-bold',fontSize:20
     }
     
   })

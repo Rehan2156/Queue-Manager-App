@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "UIhogayakadak",
-    "slug": "uihogayakadak",
+    "name": "customer",
+    "slug": "customer",
     "platforms": [
       "ios",
       "android",

@@ -10,9 +10,9 @@ import { color } from 'react-native-reanimated';
 export default class Home extends Component {
 
   state = {
-    shops: [  { shopName: 'Reliance', waiting: 50, body: 'lorem ipsum', key: '1',location:'https://goo.gl/maps/hFuasuqSfLFua7816' },
-              { shopName: 'Star Super Market', waiting: 45, body: 'lorem ipsum', key: '2',location:'https://goo.gl/maps/LzBw6AYFSocewDdP7' },
-              { shopName: 'D Mart', waiting: 30, body: 'lorem ipsum', key: '3',location:'https://goo.gl/maps/wNTPKD9YXLhZGHnx5' },  
+    shops: [  { shopName: 'Reliance', waiting: 50, body: 'Super Market', key: '1',location:'https://goo.gl/maps/hFuasuqSfLFua7816' },
+              { shopName: 'Star Super Market', waiting: 45, body: 'Super Market', key: '2',location:'https://goo.gl/maps/LzBw6AYFSocewDdP7' },
+              { shopName: 'D Mart', waiting: 30, body: 'Super Market', key: '3',location:'https://goo.gl/maps/wNTPKD9YXLhZGHnx5' },  
            ],
 
     tempArray: [],
@@ -40,7 +40,7 @@ export default class Home extends Component {
             ios: `${scheme}${label}@${latLng}`,
             android: `${scheme}${latLng}(${label})`
           });
-          myArray = [...myArray, {shopName: name, body: 'we have to add this field', location: location, key: key, waiting: 10 }]
+          myArray = [...myArray, {shopName: name, body:category, location: location, key: key, waiting: 10 }]
         })
           this.setState({
             shops: [...this.state.shops, ...myArray],
@@ -96,7 +96,7 @@ export default class Home extends Component {
             <View style={styles.cardAlign}>
             <View>
               <Text style={globalStyles.titleText}>{ item.shopName }</Text>
-              <Text>Waiting time : {item.waiting} minutes</Text>
+              <Text>{item.body}</Text>
             </View>  
             <MaterialIcons onPress={ ()=> Linking.openURL(item.location) } name='navigation' size={35} />
             </View>
