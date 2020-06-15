@@ -12,11 +12,12 @@ export default class UserQ extends Component {
       super(props);
       this.state = {
         user: firebase.auth().currentUser.email,
-        queue: 0,
+        queue:0,
         inQ: false,
         readError: null,
         writeError: null,
-        userToken: 0,
+        userToken:0,
+        loading:false, 
         isReady: false,
         myLoc: {},
         errMsg: "",
@@ -24,6 +25,7 @@ export default class UserQ extends Component {
         bool: true,
         sameKey: true,
       };
+
     }
 
     _getPreciseDistance = (myLoc, loc) => {
@@ -32,22 +34,34 @@ export default class UserQ extends Component {
       console.log(this.state.dist)
     };
 
-    getTheLocationAtFirst = async () => {
-        console.log('location at first')
-        let { status } = await Location.requestPermissionsAsync()
+  getTheLocationAtFirst = async () => {
+      console.log('location at first')
+      let { status } = await Location.requestPermissionsAsync()
 
-        if (status !== 'granted') {
-            this.setState({errMsg: 'Permission to access location was denied'})
-        }    
+      if (status !== 'granted') {
+          this.setState({errMsg: 'Permission to access location was denied'})
+      }    
 
-        var location = await Location.getCurrentPositionAsync({})
-        this.setState({myLoc: location.coords})
-        console.log(location)
-    }
+      var location = await Location.getCurrentPositionAsync({})
+      this.setState({myLoc: location.coords})
+      console.log(location)
+  }
 
-    async componentDidMount() {
-        console.log('component mounted')
+     async componentDidMount() {
+      console.log('component mounted')
+
+        //await this.getTheLocationAtFirst().then(() => {
+       //     console.log('location mila')
+       // })
+
         const key = this.props.navigation.getParam('key')
+       // const loc = this.props.navigation.getParam('loc')
+
+      //  console.log(loc)
+       //console.log(this.state.myLoc)
+
+       // this._getPreciseDistance(this.state.myLoc, loc)
+
         await firebase.database().ref('shop/' + key + '/line/').once('value', snapshot => {
             if(snapshot.exists()){
                 var number = 0;
@@ -59,6 +73,7 @@ export default class UserQ extends Component {
                 this.setState({ queue: 0 })
             }
         });
+
         await firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
             this.setState({ inQ: snap.toJSON().inQ })
         })
@@ -72,13 +87,17 @@ export default class UserQ extends Component {
                 }
             })
         }
+
         if(this.state.sameKey && this.state.inQ) {
             firebase.database().ref('shop/' + key + '/line/' + firebase.auth().currentUser.uid) .once('value', snap => {
                 this.setState({ userToken: snap.toJSON().Token })
             })
         }
+
         this.setState({ isReady: true })
     }
+
+    
   
     clickHandler = async () => {
       const userId = firebase.auth().currentUser.uid;  
@@ -88,16 +107,21 @@ export default class UserQ extends Component {
           await firebase.database().ref('shop/' + shop).once('value', function (snapshot) {
               shopDetail =  snapshot.toJSON()
           }) 
+
           var userDetail 
           await firebase.database().ref('users/' + userId).once('value', function (snapshot) {
               userDetail = snapshot.toJSON()
           })
+          console.log(shopDetail)
+          console.log(userDetail)
           var token
+
           if(shopDetail.line === undefined) {
+              console.log('yes')
               token = 1;
           } else {
               var bigNum = 0;
-              await firebase.database().ref('shop/' + shop + '/line').once('value', function(snapshot){
+              await firebase.database().ref('shop/' + shop + '/line/').once('value', function(snapshot){
                   if(snapshot.exists()){
                       snapshot.forEach(function(data){
                           var val = data.toJSON().Token;
@@ -110,6 +134,7 @@ export default class UserQ extends Component {
               token = bigNum + 1
           }
           this.setState({ userToken: token })
+
           if(userDetail.inQ === undefined || userDetail.inQ === 0) {
               await firebase.database().ref('users/' + userId).update({
                   inQ: 1,
@@ -118,11 +143,12 @@ export default class UserQ extends Component {
               this.setState({ inQ: 1 })
               var time = Math.round((Math.ceil(token / shopDetail.qSize)) * 10) ;
               await firebase.database().ref('shop/' + shop + '/line/' + userId).set({
-                      Name: userDetail.Full_ame,
+                      Name: userDetail.Full_Name,
                       Token: token,
                       Time_in_min: time
                   })
           } 
+
           console.log('done for one')
       } else {
           await firebase.database().ref('users/' + userId).update({
@@ -132,6 +158,7 @@ export default class UserQ extends Component {
           this.setState({ inQ: 0 })
           await firebase.database().ref('shop/' + shop + '/line/' + userId).remove()
       }
+
       await firebase.database().ref('shop/' + shop + '/line/').once('value', snapshot => {
           if(snapshot.exists()){
               var number = 0;
@@ -143,9 +170,11 @@ export default class UserQ extends Component {
               this.setState({ queue: 0 })
           }
       });
+
       this.state.inQ ?  Alert.alert('You are added to the queue.') : Alert.alert('You have exited the queue.') 
   }
   
+    
   render(){
     var inQbutton = this.state.inQ?"Exit the queue":"Join the queue";
     console.log('inQ :',this.state.inQ)
@@ -155,17 +184,18 @@ export default class UserQ extends Component {
     if(!this.state.isReady) {
       return <ActivityIndicator  size='large' />
     }
-
+    var wait = this.state.queue * 2
     return (
       <View style={globalStyles.body}>
       <View style={styles.box}>
         <Card>
-          <Text style={globalStyles.titleText}>
+          <Text style={styles.titleText}>
             { this.props.navigation.getParam('shopName') }
           </Text>
-          <Text>{ this.props.navigation.getParam('body') } </Text>
+          <Text style={styles.waitingText}>{ this.props.navigation.getParam('body') }</Text>
+          <Text style={styles.waitingText}>{wait} minutes waiting</Text>
         </Card>
-        <Card><Text style={{fontFamily:'nunito-bold'}}> People in Queue : <Text style={styles.bold}>{this.state.queue}</Text></Text></Card>
+        <Card><Text style={{fontFamily:'nunito-bold',fontSize:20}}> People in Queue : <Text style={styles.bold}>{this.state.queue}</Text></Text></Card>
         <Button onPress={this.clickHandler} title={inQbutton}/>
         {this.state.inQ?(
           <View>
@@ -207,8 +237,8 @@ export default class UserQ extends Component {
         fontFamily:'nunito-bold',
         position:'absolute',
         fontSize:80,
-        marginTop:150,
-        marginLeft:120,
+        marginTop:110,
+        marginLeft:100,
         color:'#f9aa33'
       },
       tokentext:{
@@ -224,7 +254,7 @@ export default class UserQ extends Component {
       marginBottom:30
       },
       box:{
-        padding:20,
+        padding:10,
         margin:5,
         marginTop:10,
         backgroundColor:'#424242',
@@ -235,6 +265,13 @@ export default class UserQ extends Component {
         // borderBottomEndRadius:15,
         // borderTopLeftRadius:15,
         elevation: 15,    
+    },
+    titleText:{
+      fontFamily:'nunito-bold',
+      fontSize:25
+    },
+    waitingText:{
+      fontFamily:'nunito-bold',fontSize:20
     }
     
   })

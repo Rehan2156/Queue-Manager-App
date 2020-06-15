@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "UIhogayakadak",
-    "slug": "quet",
+    "name": "Shopkeeper",
+    "slug": "Shopkeeper",
     "platforms": [
       "ios",
       "android",
@@ -21,10 +21,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "android": {
-      "package": "com.NativeNinjas.QueT",
-      "versionCode": 1
-    },
     "ios": {
       "supportsTablet": true
     },

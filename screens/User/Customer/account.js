@@ -7,13 +7,8 @@ import { ActivityIndicator } from 'react-native';
 import {Button} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
 const {width:WIDTH}=Dimensions.get('window')
-
-
-
 export default class account extends Component {
-
   state = {
     fullName: "",
     gmail: "",
@@ -30,7 +25,7 @@ export default class account extends Component {
     .then(() => {
         this.setState({
           fullName: myJSON.Full_Name,
-          gmail: myJSON.gmail,
+          gmail: myJSON.email,
           phoneNo: myJSON.verified_phone_no,
           isReady: true,
         })
@@ -44,7 +39,7 @@ export default class account extends Component {
       .ref('/users/' + firebase.auth().currentUser.uid)
       .update({
         Full_Name: this.state.fullName,
-        gmail: this.state.gmail,
+        email: this.state.gmail,
         verified_phone_no: this.state.phoneNo
       }).then(() => {
           Alert.alert('Data is Updated')
