@@ -29,7 +29,7 @@ export default class Home extends Component {
       var ref = firebase.database().ref("/shop");
       ref.once("value", (snapshot) => {
         snapshot.forEach( (childSnapshot) => {
-          var key = childSnapshot.key.toString()
+          var key = childSnapshot.key
           var name = childSnapshot.child("/shop_name").val().toString()
           var category = childSnapshot.child("/Category_of_shop").val().toString()
           var lat = childSnapshot.child("/location_of_shop/latitude").val()
@@ -40,7 +40,14 @@ export default class Home extends Component {
             ios: `${scheme}${label}@${latLng}`,
             android: `${scheme}${latLng}(${label})`
           });
-          myArray = [...myArray, {shopName: name, body:category, location: location, key: key, waiting: 10 }]
+
+          var loc = {
+            latitude : lat,
+            longitude: lon
+          }
+
+          myArray = [...myArray, {shopName: name, body:category, location: location, key: key, waiting: 10, loc: loc }]
+
         })
           this.setState({
             shops: [...this.state.shops, ...myArray],
@@ -72,7 +79,6 @@ export default class Home extends Component {
     if(!this.state.lisIsready) {
       return <ActivityIndicator  size='large' />
     }
-
     return (
         <View style={globalStyles.body}>
         <View style={styles.input}>

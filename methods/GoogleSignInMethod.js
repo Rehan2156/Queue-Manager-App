@@ -43,7 +43,7 @@ import { Alert } from 'react-native';
                     .database()
                     .ref('/users/' + result.user.uid)
                     .set({
-                        gmail: result.user.email,
+                        email: result.user.email,
                         profile_picture: result.additionalUserInfo.profile.picture,
                         Full_Name: result.additionalUserInfo.profile.given_name + " " + result.additionalUserInfo.profile.family_name,
                         created_at: Date.now()

@@ -15,9 +15,9 @@ export default class EmailSignInMethod {
                 .database()
                 .ref('/users/' + userCredential.user.uid)
                 .set({
-                    gmail: email,
+                    email: email,
                     profile_picture: "",
-                    Full_name: name,
+                    Full_Name: name,
                     created_at: Date.now()
                 })
                 .then(function(snapshot) {                

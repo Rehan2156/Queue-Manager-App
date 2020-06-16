@@ -15,17 +15,27 @@ export default class Shopkeeper extends Component {
       super()
       this.state={
         customers:[
-            {name:'Rehan',token:99,key:1}
+            {name:'Rehan',token:99,key:'1'}
         ],
         shopName:"",
         tempArray:[],
-        isReady:false
+        isReady:false,
+        isOpen: 0,
+        qLen: 0,
+        howMany: '',
+        line: {},
     }
     }
 
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         var myArray = []
+
+        await firebase.database().ref('shop/' + firebase.auth().currentUser.uid).once('value' , snapshot => {
+          this.setState({
+              isOpen: snapshot.toJSON().isOpen, 
+          })
+      })
 
         firebase
         .database()
@@ -41,27 +51,29 @@ export default class Shopkeeper extends Component {
         try {
             console.log("here")
             var myJSON
-          var ref = firebase.database().ref("/queueShop/Jessy Medical/line/");
+          var ref = firebase.database().ref('shop/' + firebase.auth().currentUser.uid + '/line');
           ref.once("value", (snapshot) => {
-            
-            snapshot.forEach( (childSnapshot) => {
-                console.log("cust name is ");
-            myJSON = childSnapshot.toJSON()
-            console.log("myjson 0 is "+myJSON[0])
-              var key = childSnapshot.key.toString()
-              var name = childSnapshot.child("/username").val().toString()
-              var token = childSnapshot.child("/userToken").val().toString()
-              myArray = [...myArray, {name:name,token:token, key: key }]
-            })
-              this.setState({
-                customers: [...this.state.customers, ...myArray],
+            if(snapshot.exists()){
+              var number = 0;
+              snapshot.forEach( data => {
+                number++;
+                var key = data.key
+                var name = data.toJSON().Name
+                var token = data.toJSON().Token
+                myArray = [...myArray, {name:name,token:token, key: key }]
               })
-    
-              this.setState({
-                tempArray: this.state.customers,
-                isReady: true,
-              })
-    
+                this.setState({
+                  customers: [...this.state.customers, ...myArray],
+                })
+              
+              } else {  
+                this.setState({ qLen: 0 })              
+              }
+                this.setState({
+                  tempArray: this.state.customers,
+                  isReady: true,
+                })
+
           })
         } catch(e) {
           console.log('Error: ', e)
@@ -86,13 +98,12 @@ export default class Shopkeeper extends Component {
           <FontAwesome name="arrow-down" style={styles.icon}/>
                     </View>
         )} 
-        contentContainerStyle={{ paddingBottom: 300}}
+        contentContainerStyle={{ paddingBottom: 600}}
         />
             </View>
             </View>
         )
     }
-    
 }
 
 const styles = StyleSheet.create({

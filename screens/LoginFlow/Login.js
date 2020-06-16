@@ -6,10 +6,8 @@ import EmailSignIn from '../../methods/EmailSignInMethod'
 import Icon from 'react-native-vector-icons/Ionicons'
 import * as Font from 'expo-font';
 
-
 var GoogleSi
 var EmailSi
-
 const {width:WIDTH}=Dimensions.get('window')
 
 const getFonts = () => Font.loadAsync({
@@ -39,31 +37,7 @@ export default class Login extends Component {
       error:"",
       showPass:true
     }
-  }
-
-
-  
-
-handSignIn = async (email, password) => {
-  this.setState({loading:true,error:""})
-    await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(userCredential => {
-          this.setState({loading:false})
-            firebase
-                .database()
-                .ref('/users/' + userCredential.user.uid)
-                .update({
-                    last_logged_in: Date.now()
-                }).then(() => {
-                    Alert.alert('Information','User is Successfully Signed In')
-                })
-        })
-        .catch(error => {console.log(error),this.setState({error:error}), this.setState({loading:false})})
- }
-
- 
+  } 
 
     render() {
       if(!this.state.loading){

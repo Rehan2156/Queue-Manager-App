@@ -11,8 +11,7 @@ export default class ShopeKeeperLoading extends Component {
         })
         .then(() => {
             console.log(myJSON)
-            this.props.navigation.navigate((myJSON === null) ? 'Details' : 'Shop')
-        })
+            this.props.navigation.navigate((myJSON === null) ? 'Details' :  myJSON.location_of_shop === null ? 'ShopLocation' : 'Shop')        })
         .catch( e => {
             console.log('Error', e)
         })

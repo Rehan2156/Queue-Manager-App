@@ -17,63 +17,162 @@ export default class UserQ extends Component {
         readError: null,
         writeError: null,
         userToken:0,
-        loading:false,
+        loading:false, 
         isReady: false,
+        myLoc: {},
+        errMsg: "",
+        dist: 0.0,
+        bool: true,
+        sameKey: true,
       };
 
     }
 
-     componentDidMount() {
+    _getPreciseDistance = (myLoc, loc) => {
+      var pdis = getPreciseDistance(myLoc, loc);
+      this.setState({ dist: pdis / 1000 });
+      console.log(this.state.dist)
+    };
+
+  getTheLocationAtFirst = async () => {
+      console.log('location at first')
+      let { status } = await Location.requestPermissionsAsync()
+
+      if (status !== 'granted') {
+          this.setState({errMsg: 'Permission to access location was denied'})
+      }    
+
+      var location = await Location.getCurrentPositionAsync({})
+      this.setState({myLoc: location.coords})
+      console.log(location)
+  }
+
+     async componentDidMount() {
       console.log('component mounted')
 
-      const shopName= this.props.navigation.getParam('shopName') 
-      firebase.database().ref('/queueShop/'+shopName+'/qSize').on('value', querySnapShot => {
-        let data = querySnapShot.val() ? querySnapShot.val() : {};
-        
-        this.setState({
-           queue: data,
+        //await this.getTheLocationAtFirst().then(() => {
+       //     console.log('location mila')
+       // })
+
+        const key = this.props.navigation.getParam('key')
+       // const loc = this.props.navigation.getParam('loc')
+
+      //  console.log(loc)
+       //console.log(this.state.myLoc)
+
+       // this._getPreciseDistance(this.state.myLoc, loc)
+
+        await firebase.database().ref('shop/' + key + '/line/').once('value', snapshot => {
+            if(snapshot.exists()){
+                var number = 0;
+                snapshot.forEach(function(data){
+                    number++;
+                });
+                this.setState({ queue: number })
+            } else {
+                this.setState({ queue: 0 })
+            }
         });
-        console.log('data is ',data)
-      });
-      this.setState({ isReady: true })
+
+        await firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
+            this.setState({ inQ: snap.toJSON().inQ })
+        })
+
+        if(this.state.inQ) {
+            await firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
+                if(key === snap.toJSON().shopKey) {
+                    this.setState({ sameKey: true })
+                } else {
+                    this.setState({ sameKey: false })
+                }
+            })
+        }
+
+        if(this.state.sameKey && this.state.inQ) {
+            firebase.database().ref('shop/' + key + '/line/' + firebase.auth().currentUser.uid) .once('value', snap => {
+                this.setState({ userToken: snap.toJSON().Token })
+            })
+        }
+
+        this.setState({ isReady: true })
     }
 
     
   
-     clickHandler = () => {
-      var userId = firebase.auth().currentUser.uid;
-      const shopName =  this.props.navigation.getParam('shopName') 
-      
-      if(!this.state.inQ){
+    clickHandler = async () => {
+      const userId = firebase.auth().currentUser.uid;  
+      const shop = this.props.navigation.getParam('key')
+      if(!this.state.inQ) {   
+          var shopDetail
+          await firebase.database().ref('shop/' + shop).once('value', function (snapshot) {
+              shopDetail =  snapshot.toJSON()
+          }) 
 
-      firebase.database().ref('/queueShop/'+shopName).update({
-        qSize:this.state.queue + 1,
-      })
+          var userDetail 
+          await firebase.database().ref('users/' + userId).once('value', function (snapshot) {
+              userDetail = snapshot.toJSON()
+          })
+          console.log(shopDetail)
+          console.log(userDetail)
+          var token
 
-      firebase.database().ref('queueShop/'+shopName+'/line/').push({  
-        username:this.state.user,
-        userToken:this.state.queue + 1,
-      }).then(()=>{
-        console.log('Inserted')
-        this.setState(prevState=>
-          ({inQ:!prevState.inQ,userToken:this.state.queue})
-          )
-      }).catch((error)=>{
-        console.log(error);
+          if(shopDetail.line === undefined) {
+              console.log('yes')
+              token = 1;
+          } else {
+              var bigNum = 0;
+              await firebase.database().ref('shop/' + shop + '/line/').once('value', function(snapshot){
+                  if(snapshot.exists()){
+                      snapshot.forEach(function(data){
+                          var val = data.toJSON().Token;
+                          if(bigNum < val) {
+                              bigNum = val
+                          }
+                      });
+                  }
+              });
+              token = bigNum + 1
+          }
+          this.setState({ userToken: token })
+
+          if(userDetail.inQ === undefined || userDetail.inQ === 0) {
+              await firebase.database().ref('users/' + userId).update({
+                  inQ: 1,
+                  shopKey: shop,
+              })
+              this.setState({ inQ: 1 })
+              var time = Math.round((Math.ceil(token / shopDetail.qSize)) * 10) ;
+              await firebase.database().ref('shop/' + shop + '/line/' + userId).set({
+                      Name: userDetail.Full_Name,
+                      Token: token,
+                      Time_in_min: time
+                  })
+          } 
+
+          console.log('done for one')
+      } else {
+          await firebase.database().ref('users/' + userId).update({
+              inQ: 0,
+          })
+          await firebase.database().ref('users/' + userId + '/shopKey').remove()
+          this.setState({ inQ: 0 })
+          await firebase.database().ref('shop/' + shop + '/line/' + userId).remove()
+      }
+
+      await firebase.database().ref('shop/' + shop + '/line/').once('value', snapshot => {
+          if(snapshot.exists()){
+              var number = 0;
+              snapshot.forEach(function(data){
+                  number++;
+              });
+              this.setState({ queue: number })
+          } else {
+              this.setState({ queue: 0 })
+          }
       });
-    }
-    else{
-      firebase.database().ref('/queueShop/'+shopName).update({
-        qSize:this.state.queue - 1,
-      })
-      firebase.database().ref('queueShop/'+shopName+'/line/'+userId).remove()
-      this.setState(prevState=>
-        ({inQ:!prevState.inQ})
-        )
-    }
 
-      this.state.inQ?Alert.alert('You have exited the queue.'):Alert.alert('You are added to the queue.');
-    };
+      this.state.inQ ?  Alert.alert('You are added to the queue.') : Alert.alert('You have exited the queue.') 
+  }
   
     
   render(){
