@@ -50,7 +50,7 @@ The motivation for this app comes from social distancing violations at wine shop
 
 Screenshots of the app :
 
-<img src="https://user-images.githubusercontent.com/58468910/84812886-baf6af80-b02c-11ea-8942-dedf85a26e47.jpg" width="100" height="100">
+<img src="https://user-images.githubusercontent.com/58468910/84812886-baf6af80-b02c-11ea-8942-dedf85a26e47.jpg" width="50%" height="50%">
 
 ![Screenshot_2020-06-14-11-03-47-823_host exp exponent](https://user-images.githubusercontent.com/58468910/84812886-baf6af80-b02c-11ea-8942-dedf85a26e47.jpg){:height="50%" width="50%"}
 
