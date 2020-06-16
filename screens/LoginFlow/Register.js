@@ -5,10 +5,8 @@ import GoogleSignIn from '../../methods/GoogleSignInMethod'
 import EmailSignIn from '../../methods/EmailSignInMethod'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-
 var GoogleSi
 var EmailSi
-
 const {width:WIDTH}=Dimensions.get('window')
 
 const getFonts = () => Font.loadAsync({
@@ -21,8 +19,6 @@ const getFonts = () => Font.loadAsync({
 });
 
 export default class Register extends Component {
-
-
   constructor(props) {
     super(props)
     GoogleSi = new GoogleSignIn();
@@ -34,34 +30,8 @@ export default class Register extends Component {
       password: "",
       loading:false,
       showPass:true
-
   }
   }
-
-  handSignUp = async (name, email, password) => {
-    console.log('pressed email sign in')
-    this.setState({loading:true})
-    await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            console.log("In Sign Up")
-            this.setState({loading:false})
-            firebase
-            .database()
-            .ref('/users/' + userCredential.user.uid)
-            .set({
-                gmail: email,
-                profile_picture: "",
-                Full_name: name,
-                created_at: Date.now()
-            })
-            .then(function(snapshot) {                
-                Alert.alert('Information','User is Successfully Signed Up')
-            });
-        })
-        .catch(error => {console.log(error); this.setState({loading:false})})
-}
 
     render() {
       if(!this.state.loading){
