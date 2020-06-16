@@ -2,6 +2,7 @@
   "expo": {
     "name": "QueT",
     "slug": "callingfunctiondone",
+
     "platforms": [
       "ios",
       "android",
