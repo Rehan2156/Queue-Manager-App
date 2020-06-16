@@ -14,12 +14,12 @@ exports.newUserSignIn = functions.auth.user().onCreate(user => {
 exports.userDeleted = functions.auth.user().onDelete(user => {
     console.log("Email: " + user.email + " UID: " + user.uid);
     var ret;
-    ret = admin.database().ref('shop/' + user.uid).remove();
+    admin.database().ref('shop/' + user.uid).remove()
     admin.database().ref('users/' + user.uid).once('value', snap => {
         if(snap.toJSON.shopKey !== null || snap.toJSON.shopKey !== undefined) {
-            ret += admin.database().ref('shop/' + snap.toJSON.shopKey + '/line/' + user.uid).remove();
+            admin.database().ref('shop/' + snap.toJSON.shopKey + '/line/' + user.uid).remove()
         }
     })
-    ret += admin.database().ref('users/' + user.uid);
+    ret = admin.database().ref('users/' + user.uid)
     return ret;
 })
