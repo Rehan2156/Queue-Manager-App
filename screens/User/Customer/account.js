@@ -15,9 +15,11 @@ export default class account extends Component {
     phoneNo: "",
     isReady: false,
     isWantToUpdate: false,
+    isShopkeeper: false,
+    isOpen: 0,
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     var myJSON
     firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function (snapshot) {
       myJSON = snapshot.toJSON()
@@ -28,8 +30,21 @@ export default class account extends Component {
           gmail: myJSON.email,
           phoneNo: myJSON.verified_phone_no,
           isReady: true,
+          isShopkeeper: myJSON.userType === "Shopkeeper" ? true : false,
         })
+    }).then(() => {
+      if(this.state.isShopkeeper) {
+        var shopDetail
+        firebase.database().ref('shop/' + firebase.auth().currentUser.uid).once('value', data => {
+          shopDetail = data.toJSON()
+        })
+        this.setState({ isOpen: shopDetail.isOpen })
+      }
     })
+  }
+
+  componentWillUnmount = () => {
+    console.log('tata')
   }
 
   updateData = () => {
@@ -47,6 +62,38 @@ export default class account extends Component {
       this.setState({ isReady: true })
   }
 
+  wantToClose = async () => {
+    await firebase.database().ref('shop/' + firebase.auth().currentUser.uid).update({
+        isOpen: 0
+    })
+    .then(() => {
+        firebase.database().ref('shop/' + firebase.auth().currentUser.uid + '/line').remove()
+        this.setState({ isOpen: 0 })
+    })
+    console.log('wantToClose')
+  }
+
+  wantToOpen = async () => {
+    await firebase.database().ref('shop/' + firebase.auth().currentUser.uid).update({
+        isOpen: 1
+    })
+    .then(() => {
+        firebase.database().ref('shop/' + firebase.auth().currentUser.uid).update({ 
+            line: {}
+         })
+        this.setState({ isOpen: 1 })
+    })
+    console.log('wantToOpen')
+  }
+
+  toggleTheOpen = async () => {
+    if(this.state.isOpen === 1) {
+      await this.wantToClose() 
+    } else {
+      await this.wantToOpen()
+    }
+  }
+
   render() {
 
     if(!this.state.isReady) {
@@ -55,6 +102,14 @@ export default class account extends Component {
 
     return (
       <View style={styles.body}>
+
+        { this.state.isShopkeeper && <Button  
+          title = { this.state.isOpen ? "Close the Shop" : "Open the Shop" }
+          onPress = {this.toggleTheOpen}
+          style = {{ margin: 15 }}
+        /> }  
+
+        <Text> </Text>
         <Button
           title='Log Out'
           icon={
