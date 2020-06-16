@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, View, Button,TouchableOpacity, Alert } from 'react-native'
 import * as firebase from 'firebase'
 import { FlatList } from 'react-native-gesture-handler';
 import Card from '../../../shared/card';
@@ -11,75 +11,90 @@ import { FontAwesome } from '@expo/vector-icons';
 
 export default class Shopkeeper extends Component {
     
-    constructor(){
-      super()
-      this.state={
-        customers:[
-            {name:'Rehan',token:99,key:1}
-        ],
-        shopName:"",
-        tempArray:[],
-        isReady:false
+    state={
+      customers:[
+         { name: "Ajay Das",token:1,key:1},
+         {name:'Laukik Chavan',token:2,key:2},
+         {name:'Rehan Shaikh',token:3,key:3},
+     ],
+     shopName:"",
+     tempArray:[
+         {name:'Laukik Chavan',token:2,key:2},
+         {name:'Rehan Shaikh',token:3,key:3},
+     ],
+     isReady:false  
+
     }
+
+    tempArray=[
+      {name:'Laukik Chavan',token:2,key:2},
+      {name:'Rehan Shaikh',token:3,key:3},
+  ]
+    call=()=>{
+      this.setState({customers:this.tempArray})
+      Alert.alert("Notification sent to 'Ajay Das'","People in queue : 2")
     }
+    // componentDidMount = () => {
+    //     var myArray = []
 
+    //     firebase
+    //     .database()
+    //     .ref('/shop/'+firebase.auth().currentUser.uid)
+    //     .on("value",(snapshot)=>{
+    //         var shopName = snapshot.child("/shop_name").val().toString()
+    //         console.log("shop name "+shopName)
+    //         this.setState({
+    //             shopName:shopName
+    //         })
+    //     })
 
-    componentDidMount = () => {
-        var myArray = []
-
-        firebase
-        .database()
-        .ref('/shop/'+firebase.auth().currentUser.uid)
-        .on("value",(snapshot)=>{
-            var shopName = snapshot.child("/shop_name").val().toString()
-            console.log("shop name "+shopName)
-            this.setState({
-                shopName:shopName
-            })
-        })
-
-        try {
-            console.log("here")
-            var myJSON
-          var ref = firebase.database().ref("/queueShop/Jessy Medical/line/");
-          ref.once("value", (snapshot) => {
+    //     try {
+    //         console.log("here")
+    //         var myJSON
+    //       var ref = firebase.database().ref("/queueShop/Jessy Medical/line/");
+    //       ref.once("value", (snapshot) => {
             
-            snapshot.forEach( (childSnapshot) => {
-                console.log("cust name is ");
-            myJSON = childSnapshot.toJSON()
-            console.log("myjson 0 is "+myJSON[0])
-              var key = childSnapshot.key.toString()
-              var name = childSnapshot.child("/username").val().toString()
-              var token = childSnapshot.child("/userToken").val().toString()
-              myArray = [...myArray, {name:name,token:token, key: key }]
-            })
-              this.setState({
-                customers: [...this.state.customers, ...myArray],
-              })
+    //         snapshot.forEach( (childSnapshot) => {
+    //             console.log("cust name is ");
+    //         myJSON = childSnapshot.toJSON()
+    //         console.log("myjson 0 is "+myJSON[0])
+    //           var key = childSnapshot.key.toString()
+    //           var name = childSnapshot.child("/username").val().toString()
+    //           var token = childSnapshot.child("/userToken").val().toString()
+    //           myArray = [...myArray, {name:name,token:token, key: key }]
+    //         })
+    //           this.setState({
+    //             customers: [...this.state.customers, ...myArray],
+    //           })
     
-              this.setState({
-                tempArray: this.state.customers,
-                isReady: true,
-              })
+    //           this.setState({
+    //             tempArray: this.state.customers,
+    //             isReady: true,
+    //           })
     
-          })
-        } catch(e) {
-          console.log('Error: ', e)
-        }
-      }
+    //       })
+    //     } catch(e) {
+    //       console.log('Error: ', e)
+    //     }
+    //   }
     
     render(){
         return (
           <View style={{backgroundColor:'#Fedbd0'}}>
             <View style={styles.body}>
-                <Text style={styles.head}>People in queue</Text>
-                <FlatList data={this.state.tempArray} renderItem={({ item }) => (
+            <TouchableOpacity style={styles.myBtnB} onPress={this.call}>
+                        <Text style={styles.label}>Click To call next person </Text>
+                    </TouchableOpacity>
+                <Text style={styles.head}>People in Queue</Text>
+                {/* <Text>Your shop queue is empty</Text> */}
+                
+                <FlatList data={this.state.customers} renderItem={({ item }) => (
                     <View>
           <TouchableOpacity style={styles.touch}>
             <View style={styles.cardAlign}>
             <View>
-              <Text style={globalStyles.titleText}>{ item.name }</Text>
-              <Text>Token : {item.token}</Text>
+              <Text style={{fontFamily:'nunito-bold',fontSize:20}}>{ item.name }</Text>
+              <Text style={{fontFamily:'nunito-bold'}}>Token : {item.token}</Text>
             </View>  
             </View>
           </TouchableOpacity>
@@ -88,6 +103,7 @@ export default class Shopkeeper extends Component {
         )} 
         contentContainerStyle={{ paddingBottom: 300}}
         />
+        <Text style={{fontFamily:'nunito-bold',marginBottom:10,textAlign:'center',fontSize:20,color:'#fff'}}>Last person</Text>
             </View>
             </View>
         )
@@ -96,7 +112,22 @@ export default class Shopkeeper extends Component {
 }
 
 const styles = StyleSheet.create({
-    
+  label: {
+    fontSize: 15,
+    color: '#555',
+    margin: 5,
+    padding: 10,
+    fontFamily:'nunito-bold'
+},
+  myBtnB: {
+    padding: 5,
+    margin: 3,
+    borderRadius: 30,
+    borderColor: '#aaa',
+    alignItems: 'center',
+    backgroundColor: '#fedbd0',
+    marginTop: 30,
+},
     container: {
       flex: 1,
       backgroundColor: '#fff',
@@ -105,16 +136,17 @@ const styles = StyleSheet.create({
     },
     head:{
         padding:15,
-        fontWeight:'bold',
+        fontFamily:'nunito-bold',
         fontSize:20,
         textAlign:'center',
-        opacity:0.7,
-        color:'white'
+        // opacity:0.7,
+        color:'#fff'
     },
     body:{
         backgroundColor:'#424242',
         padding:50,
         borderTopLeftRadius:150,
+        height:'100%'
     },
     
     touch:{

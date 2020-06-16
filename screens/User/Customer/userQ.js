@@ -139,7 +139,7 @@ export default class UserQ extends Component {
         position:'absolute',
         fontSize:80,
         marginTop:110,
-        marginLeft:100,
+        marginLeft:125,
         color:'#f9aa33'
       },
       tokentext:{
