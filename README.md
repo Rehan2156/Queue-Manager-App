@@ -3,6 +3,4 @@ A React Native mobile app to manage crowd at shops in COVID 19 pandemic. This ap
 
 The motivation for this app comes from social distancing violations at wine shops all across India. Several people gathered at shops in long queues. Thus posing a health alert for COVID 19 local transmission.
 
-Expo link to the app: https://expo.io/@leo1320006/quet
 
-Download Expo from Google Play Store and click the above link. (Only for mobile)
