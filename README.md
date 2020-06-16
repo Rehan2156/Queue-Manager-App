@@ -18,19 +18,29 @@ the people he can handle without compromising on social distancing.
 What's in it for customers : 👇
 
 ►Search the shop you want to visit
+
 ►Join the queue and get your token number
+
 ►Leave your home only when you are prompted that your turn will arrive shortly
+
 ►No need to wait in long queues for hours
+
 ►Thus without much contact with anyone you can purchase your items from the shop
 
 
 What's in it for shopkeepers : 👇
+
 ►Open the queue shop window from the app
+
 ►Customers will join the queue
+
 ►Call next person in individually or in a group according to token numbers just by a press of a
 button
+
 ►No long waiting lines outside your shop
+
 ►Users only within an 8 km radius can join
+
 ►Thus preventing spam people from joining the queue
 
 YouTube video of our app : https://youtu.be/qPuGu3PGPYY
