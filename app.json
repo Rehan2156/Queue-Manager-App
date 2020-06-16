@@ -2,6 +2,7 @@
   "expo": {
     "name": "Shopkeeper",
     "slug": "Shopkeeper",
+
     "platforms": [
       "ios",
       "android",
