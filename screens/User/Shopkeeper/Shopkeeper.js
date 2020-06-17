@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, View, Button,TouchableOpacity, Dimensions } from 'react-native'
 import * as firebase from 'firebase'
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TextInput } from 'react-native-gesture-handler';
 import Card from '../../../shared/card';
 import { globalStyles } from '../../../styles/global';
 import { FontAwesome } from '@expo/vector-icons';
+
+const {width:WIDTH}=Dimensions.get('window')
 
 export default class Shopkeeper extends Component {
     
@@ -21,6 +23,8 @@ export default class Shopkeeper extends Component {
         qLen: 0,
         howMany: '',
         line: {},
+        customNum: 0,
+        num: '',
     }
     }
 
@@ -98,32 +102,77 @@ export default class Shopkeeper extends Component {
           times = times - 1
         }
       }
+
+      customNumberCall = () => {
+        if(this.state.customNum === 0) {
+          this.setState({ customNum: 1 })
+        } else {
+          let n = parseInt(this.state.num)
+          this.wantToDelete(n)
+          this.setState({ num: '' })
+          this.setState({ customNum: 0 })
+        }
+      }
     
     render(){
         return (
           <View style={{backgroundColor:'#Fedbd0'}}>
             <View style={styles.body}>
-              <Button
-                title = " call 1 " 
-                onPress = {() => {this.wantToDelete(1)}}
-              />
-              <Text />
-              <Button
-                title = " call 2 " 
-                onPress = {() => {this.wantToDelete(2)}}
-              />
-              <Text />
-              <Button
-                title = " call 5 " 
-                onPress = {() => {this.wantToDelete(5)}}
-              />
-              <Text />
-              <Button
-                title = " call 10 " 
-                onPress = {() => {this.wantToDelete(10)}}
-              />
-              <Text />
 
+              { this.state.customNum ? 
+                  <TextInput style={styles.myInput} 
+                    value = {this.state.num}
+                    onChangeText = {val => this.setState({ num: val })}
+                    placeholder={'Enter Number'}
+                          placeholderTextColor={'rgba(255,255,255,0.7)'}
+                          underlineColorAndroid='transparent'
+                  /> 
+                  :
+                  <></>
+              }
+
+              <View style = { styles.btnGrid }>
+                <TouchableOpacity 
+                  style= { styles.myBtn}        
+                  onPress = {() => {this.wantToDelete(1)}}        
+                > 
+                  <Text style= { styles.myBtnText} > call 1 </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                  style= { styles.myBtn}        
+                  onPress = {() => {this.wantToDelete(2)}}        
+                >  
+                  <Text style= { styles.myBtnText} > call 2 </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                  style= { styles.myBtn}        
+                  onPress = {() => {this.wantToDelete(5)}}        
+                >  
+                  <Text style= { styles.myBtnText} > call 5 </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                  style= { styles.myBtn}        
+                  onPress = {() => {this.wantToDelete(10)}}        
+                >  
+                  <Text style= { styles.myBtnText} > call 10 </Text>
+                </TouchableOpacity>
+              </View>
+
+                { !this.state.customNum ?  
+                    <TouchableOpacity 
+                    style= { styles.myBtnNew}   
+                    onPress = { this.customNumberCall } >
+                      <Text style= { styles.myBtnText} > your number </Text>
+                    </TouchableOpacity>  :
+                    <TouchableOpacity 
+                    style= { styles.myBtnNew}  
+                    onPress = { this.customNumberCall } >
+                      <Text style= { styles.myBtnText}> call </Text>
+                    </TouchableOpacity>
+                }
 
                 <Text style={styles.head}>People in queue</Text>
                 <FlatList data={this.state.tempArray} renderItem={({ item }) => (
@@ -169,14 +218,25 @@ const styles = StyleSheet.create({
         borderTopLeftRadius:150,
     },
     
+  myInput: {
+    alignSelf:'center',
+    width: WIDTH - 55,
+    height:55,
+    borderRadius:45,
+    fontSize:16,
+    paddingLeft:45,
+    backgroundColor:'rgba(0,0,0,0.35)',
+    color:'rgba(255,255,255,0.7)',
+    marginHorizontal:25,
+    fontFamily:'nunito-bold',
+    margin:20
+  },
     touch:{
         backgroundColor:'#Fedbd0',
         margin:10,
         marginLeft:10,
         marginRight:10,
         alignItems: 'center',
-    //   justifyContent: 'center',
-    //   alignContent:'center',
       shadowOffset: { width: 1, height: 1 },
     shadowColor: '#333',
     shadowOpacity: 0.3,
@@ -201,5 +261,52 @@ const styles = StyleSheet.create({
       textAlign:'center',
       fontSize:20,
       color:'#8A8A87'
-    }
+    },
+    myBtnNew: {
+      width: '100%',
+      alignSelf:'center',
+      height:60,
+      borderRadius:20,
+      backgroundColor:'#fedbd0',
+      justifyContent:'center',
+      marginTop:30,
+      marginHorizontal:10,
+      shadowOffset: { width: 1, height: 1 },
+      shadowColor: '#333',
+      shadowOpacity: 0.3,
+      shadowRadius: 2,
+      elevation: 3,
+    },
+  myBtn: {
+    width: '43%',
+    alignSelf:'center',
+    height:60,
+    borderRadius:20,
+    backgroundColor:'#fedbd0',
+    justifyContent:'center',
+    marginTop:30,
+    marginHorizontal:10,
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: '#333',
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  myBtnText: {
+    padding: 7,
+    margin: 5,
+    fontSize: 18,
+    alignSelf: 'center',
+    color: '#555',
+    fontWeight: 'bold'
+  },
+
+  btnGrid: {
+    marginLeft: 0,
+    paddingLeft: 0,
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'row'
+  },
+
 })
