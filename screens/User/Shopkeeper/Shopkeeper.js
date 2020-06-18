@@ -6,9 +6,6 @@ import Card from '../../../shared/card';
 import { globalStyles } from '../../../styles/global';
 import { FontAwesome } from '@expo/vector-icons';
 
-
-
-
 export default class Shopkeeper extends Component {
     
     constructor(){
@@ -31,29 +28,23 @@ export default class Shopkeeper extends Component {
 
     componentDidMount = async () => {
         var myArray = []
-
         await firebase.database().ref('shop/' + firebase.auth().currentUser.uid).once('value' , snapshot => {
           this.setState({
               isOpen: snapshot.toJSON().isOpen, 
           })
       })
-
         firebase
         .database()
         .ref('/shop/'+firebase.auth().currentUser.uid)
         .on("value",(snapshot)=>{
             var shopName = snapshot.child("/shop_name").val().toString()
-            console.log("shop name "+shopName)
             this.setState({
                 shopName:shopName
             })
         })
-
         try {
-            console.log("here")
-            var myJSON
-          var ref = firebase.database().ref('shop/' + firebase.auth().currentUser.uid + '/line');
-          ref.once("value", (snapshot) => {
+          var ref = await firebase.database().ref('shop/' + firebase.auth().currentUser.uid + '/line');
+          await ref.once("value", (snapshot) => {
             if(snapshot.exists()){
               var number = 0;
               snapshot.forEach( data => {
@@ -74,10 +65,38 @@ export default class Shopkeeper extends Component {
                   tempArray: this.state.customers,
                   isReady: true,
                 })
-
+          }).then(() => {
+            var sortArray = this.state.tempArray
+            sortArray.sort( (a, b) => a.token - b.token )
+            console.log(sortArray)
+            this.setState({ tempArray: sortArray })
           })
         } catch(e) {
           console.log('Error: ', e)
+        }
+      }
+
+      componentWillUnmount = () => {
+        console.log('The end')
+      }
+
+      wantToDelete = async (times) => {
+        while(times > 0) {
+          console.log('hello')
+          var deleteArray = this.state.tempArray        
+          deleteArray.reverse()
+          var temp = deleteArray.reverse()[0]
+          deleteArray.reverse().pop()
+          deleteArray.reverse()
+          this.setState({ tempArray: deleteArray })
+          console.log(temp.key)
+          await firebase.database().ref('shop/' + firebase.auth().currentUser.uid + '/line/' + temp.key).remove();
+          await firebase.database().ref('users/' + temp.key).update({
+            inQ: 0,
+            shopKey: null
+          })
+          console.log('deleted')
+          times = times - 1
         }
       }
     
@@ -85,13 +104,30 @@ export default class Shopkeeper extends Component {
         return (
           <View style={{backgroundColor:'#Fedbd0'}}>
             <View style={styles.body}>
-            <TouchableOpacity style={styles.myBtnB} onPress={this.call}>
-                        <Text style={styles.label}>Click To call next person </Text>
-                    </TouchableOpacity>
-                <Text style={styles.head}>People in Queue</Text>
-                {/* <Text>Your shop queue is empty</Text> */}
-                
-                <FlatList data={this.state.customers} renderItem={({ item }) => (
+              <Button
+                title = " call 1 " 
+                onPress = {() => {this.wantToDelete(1)}}
+              />
+              <Text />
+              <Button
+                title = " call 2 " 
+                onPress = {() => {this.wantToDelete(2)}}
+              />
+              <Text />
+              <Button
+                title = " call 5 " 
+                onPress = {() => {this.wantToDelete(5)}}
+              />
+              <Text />
+              <Button
+                title = " call 10 " 
+                onPress = {() => {this.wantToDelete(10)}}
+              />
+              <Text />
+
+
+                <Text style={styles.head}>People in queue</Text>
+                <FlatList data={this.state.tempArray} renderItem={({ item }) => (
                     <View>
           <TouchableOpacity style={styles.touch}>
             <View style={styles.cardAlign}>

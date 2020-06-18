@@ -97,7 +97,9 @@ export default class UserQ extends Component {
         this.setState({ isReady: true })
     }
 
-    
+    componentWillUnmount = () => {
+      console.log('Tata')
+    }
   
     clickHandler = async () => {
       const userId = firebase.auth().currentUser.uid;  
@@ -112,12 +114,9 @@ export default class UserQ extends Component {
           await firebase.database().ref('users/' + userId).once('value', function (snapshot) {
               userDetail = snapshot.toJSON()
           })
-          console.log(shopDetail)
-          console.log(userDetail)
           var token
 
           if(shopDetail.line === undefined) {
-              console.log('yes')
               token = 1;
           } else {
               var bigNum = 0;
@@ -177,8 +176,6 @@ export default class UserQ extends Component {
     
   render(){
     var inQbutton = this.state.inQ?"Exit the queue":"Join the queue";
-    console.log('inQ :',this.state.inQ)
-    console.log('button  :',inQbutton)
     if(!this.state.loading){
 
     if(!this.state.isReady) {
@@ -237,8 +234,8 @@ export default class UserQ extends Component {
         fontFamily:'nunito-bold',
         position:'absolute',
         fontSize:80,
-        marginTop:110,
-        marginLeft:125,
+        marginTop:160,
+        marginLeft:100,
         color:'#f9aa33'
       },
       tokentext:{
