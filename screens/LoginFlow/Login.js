@@ -2,33 +2,55 @@ import React, { Component } from 'react'
 import { Text, StyleSheet, View, ActivityIndicator,ImageBackground, Dimensions } from 'react-native'
 import { TouchableOpacity, TextInput } from 'react-native-gesture-handler'
 import GoogleSignIn from '../../methods/GoogleSignInMethod'
-import EmailSignIn from '../../methods/EmailSignInMethod'
+// import EmailSignIn from '../../methods/EmailSignInMethod'
 import Icon from 'react-native-vector-icons/Ionicons'
 import * as Font from 'expo-font';
+import * as firebase from 'firebase'
+
 
 var GoogleSi
 var EmailSi
 const {width:WIDTH}=Dimensions.get('window')
 
-const getFonts = () => Font.loadAsync({
-  'Righteous': require('../../assets/fonts/Righteous-Regular.ttf'),
-  'Acme': require('../../assets/fonts/Acme-Regular.ttf'),
-  'nunito-regular': require('../../assets/fonts/Nunito-Regular.ttf'),
-  'nunito-bold': require('../../assets/fonts/Nunito-Bold.ttf'),
-  'Metal-Mania': require('../../assets/fonts/MetalMania-Regular.ttf'),
+// const getFonts = () => Font.loadAsync({
+//   'Righteous': require('../../assets/fonts/Righteous-Regular.ttf'),
+//   'Acme': require('../../assets/fonts/Acme-Regular.ttf'),
+//   'nunito-regular': require('../../assets/fonts/Nunito-Regular.ttf'),
+//   'nunito-bold': require('../../assets/fonts/Nunito-Bold.ttf'),
+//   'Metal-Mania': require('../../assets/fonts/MetalMania-Regular.ttf'),
 
-});
+// });
 
 export default class Login extends Component {
 
-  componentDidMount(){
-    Font.loadAsync(getFonts)
-  }
+
+
+handSignIn = async (email, password) => {
+    await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            firebase
+                .database()
+                .ref('/users/' + userCredential.user.uid)
+                .update({
+                    last_logged_in: Date.now()
+                }).then(() => {
+                    Alert.alert('Information','User is Successfully Signed In')
+                    this.setState({loading:false})
+                })
+        })
+        .catch(error => {this.setState({error:error.message,loading:false}), console.log(error.message)})
+ }
+
+  // componentDidMount(){
+  //   Font.loadAsync(getFonts)
+  // }
 
   constructor(props) {
     super(props)
     GoogleSi = new GoogleSignIn();
-    EmailSi = new EmailSignIn();
+    // EmailSi = new EmailSignIn();
 
     this.state = {
       email: "",
@@ -44,7 +66,7 @@ export default class Login extends Component {
         return (
           <ImageBackground style={styles.backgroundContainer} source={{uri:'https://wallpaperaccess.com/full/654232.png'}}>
           <Text style={styles.head}>Login to QueT</Text>
-                <Text>{this.state.error}</Text>
+                <Text style={styles.errormsg}>{this.state.error}</Text>
 
                 <View style={styles.inputContainer}>
                 <Icon name={'ios-at'} size={28} color={'rgba(255,255,255,0.7)'} style={styles.inputIcon}/>
@@ -75,7 +97,7 @@ export default class Login extends Component {
                 </View>
 
                 <TouchableOpacity style={styles.myBtn} 
-                onPress = {() => {this.setState({loading:true}),EmailSi.handSignIn(this.state.email, this.state.password)}}
+                onPress = {() => {this.setState({loading:true}),this.handSignIn(this.state.email, this.state.password)}}
                 >
                   <Text style={styles.btnText}> Sign In </Text>
                 </TouchableOpacity>
@@ -104,7 +126,7 @@ export default class Login extends Component {
         return(
           <View style={styles.loading}>
             <Text> Loading Please Wait ... </Text>
-              <ActivityIndicator size = 'large' />
+              <ActivityIndicator size = 'large'/>
           </View>
         )
       }
@@ -204,6 +226,14 @@ const styles = StyleSheet.create({
     fontFamily:'nunito-bold'
 
   },  
+  errormsg:{
+    fontSize: 20,
+    textAlign:'center',
+    color: '#FAF9F6',
+    // fontWeight:'bold',
+    fontFamily:'nunito-bold',
+    color:'#F27D71'
+  },
 
   navBtn: {
     padding: 14,
