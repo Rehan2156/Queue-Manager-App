@@ -47,6 +47,7 @@ export default class Home extends Component {
           }
 
           myArray = [...myArray, {shopName: name, body:category, location: location, key: key, waiting: 10, loc: loc }]
+
         })
           this.setState({
             shops: [...this.state.shops, ...myArray],
