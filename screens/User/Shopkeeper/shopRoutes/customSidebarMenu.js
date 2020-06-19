@@ -41,7 +41,7 @@ export default class CustomSidebarMenu extends Component {
           style={styles.sideMenuProfileIcon}
         />
         <Text style={styles.qtext}>QueT</Text>
-        <Text style={{fontFamily:'nunito-bold', fontSize:20,color:'#fff'}}>Hello, {firebase.auth().currentUser.email}</Text>
+        <Text style={{fontFamily:'nunito-bold', fontSize:20,color:'#fff'}}>Hello, {firebase.auth().currentUser.displayName}</Text>
         <View
           style={{
             width: '100%',

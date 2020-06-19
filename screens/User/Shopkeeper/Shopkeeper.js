@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableOpacity, Dimensions } from 'react-native'
+import { Text, StyleSheet, View, Button,TouchableOpacity, Alert } from 'react-native'
 import * as firebase from 'firebase'
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import Card from '../../../shared/card';
 import { globalStyles } from '../../../styles/global';
 import { FontAwesome } from '@expo/vector-icons';
-
-const {width:WIDTH}=Dimensions.get('window')
-
 export default class Shopkeeper extends Component {
     
     constructor(){
@@ -28,6 +25,7 @@ export default class Shopkeeper extends Component {
     }
     }
 
+    
 
     componentDidMount = async () => {
         var myArray = []
@@ -180,8 +178,8 @@ export default class Shopkeeper extends Component {
           <TouchableOpacity style={styles.touch}>
             <View style={styles.cardAlign}>
             <View>
-              <Text style={globalStyles.titleText}>{ item.name }</Text>
-              <Text>Token : {item.token}</Text>
+              <Text style={{fontFamily:'nunito-bold',fontSize:20}}>{ item.name }</Text>
+              <Text style={{fontFamily:'nunito-bold'}}>Token : {item.token}</Text>
             </View>  
             </View>
           </TouchableOpacity>
@@ -190,6 +188,7 @@ export default class Shopkeeper extends Component {
         )} 
         contentContainerStyle={{ paddingBottom: 600}}
         />
+        <Text style={{fontFamily:'nunito-bold',marginBottom:10,textAlign:'center',fontSize:20,color:'#fff'}}>Last person</Text>
             </View>
             </View>
         )
@@ -197,7 +196,22 @@ export default class Shopkeeper extends Component {
 }
 
 const styles = StyleSheet.create({
-    
+  label: {
+    fontSize: 15,
+    color: '#555',
+    margin: 5,
+    padding: 10,
+    fontFamily:'nunito-bold'
+},
+  myBtnB: {
+    padding: 5,
+    margin: 3,
+    borderRadius: 30,
+    borderColor: '#aaa',
+    alignItems: 'center',
+    backgroundColor: '#fedbd0',
+    marginTop: 30,
+},
     container: {
       flex: 1,
       backgroundColor: '#fff',
@@ -206,16 +220,17 @@ const styles = StyleSheet.create({
     },
     head:{
         padding:15,
-        fontWeight:'bold',
+        fontFamily:'nunito-bold',
         fontSize:20,
         textAlign:'center',
-        opacity:0.7,
-        color:'white'
+        // opacity:0.7,
+        color:'#fff'
     },
     body:{
         backgroundColor:'#424242',
         padding:50,
         borderTopLeftRadius:150,
+        height:'100%'
     },
     
   myInput: {
