@@ -18,7 +18,7 @@
     "firebase": "7.9.0",
     "google-maps-react": "^2.0.6",
     "logkitty": "^0.7.1",
-    "mem": "^6.1.0",
+    "mem": "^4.0.0",
     "path-to-regexp": "^6.1.0",
     "react": "~16.9.0",
     "react-bootstrap": "^1.0.1",
