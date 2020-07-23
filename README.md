@@ -1,5 +1,4 @@
-# QueT
-QueT : Keeps social distancing in check. No more long queues
+# QueT : An app to keep social distancing in check. Takes the queue online.
 
 The app is called &#39;QueT&#39;. It is a online token based solution for handling long waiting queues at
 shops. Recently there were many violations in social distancing of people standing in queue
@@ -15,7 +14,7 @@ arrive at the shop only when it&#39;s your turn shortly.
 The shopkeeper calls in the next person from our app with the press of a button depending on
 the people he can handle without compromising on social distancing.
 
-What's in it for customers : 👇
+# What's in it for customers : 👇
 
 ►Search the shop you want to visit
 
@@ -28,7 +27,7 @@ What's in it for customers : 👇
 ►Thus without much contact with anyone you can purchase your items from the shop
 
 
-What's in it for shopkeepers : 👇
+# What's in it for shopkeepers : 👇
 
 ►Open the queue shop window from the app
 
@@ -43,12 +42,12 @@ button
 
 ►Thus preventing spam people from joining the queue
 
-YouTube video of our app : https://youtu.be/qPuGu3PGPYY
+# YouTube video of our app : https://youtu.be/qPuGu3PGPYY
 
 The motivation for this app comes from social distancing violations at wine shops all across India. Several people gathered at shops in long queues. Thus posing a health alert for COVID 19 local transmission.
 
 
-Screenshots of the app :
+# Screenshots of the app :
 
 <img src="https://user-images.githubusercontent.com/58468910/84812886-baf6af80-b02c-11ea-8942-dedf85a26e47.jpg" width="50%" height="50%">
 
