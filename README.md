@@ -49,16 +49,12 @@ The motivation for this app comes from social distancing violations at wine shop
 
 # Screenshots of the app :
 
-<img src="https://user-images.githubusercontent.com/58468910/84812886-baf6af80-b02c-11ea-8942-dedf85a26e47.jpg" width="50%" height="50%">
+<img src="https://user-images.githubusercontent.com/58468910/84812886-baf6af80-b02c-11ea-8942-dedf85a26e47.jpg" width="30%" height="30%">  <img src="https://user-images.githubusercontent.com/58468910/84812928-c8ac3500-b02c-11ea-834d-d55d18769624.jpg" width="30%" height="30%">
+<img src="https://user-images.githubusercontent.com/58468910/84812952-d2ce3380-b02c-11ea-858c-58c76618ce6b.jpg" width="30%" height="30%">
+<img src="https://user-images.githubusercontent.com/58468910/84812961-d6fa5100-b02c-11ea-8c3f-9d7d9358ff5f.jpg" width="30%" height="30%">
+<img src="https://user-images.githubusercontent.com/58468910/84812991-e2e61300-b02c-11ea-9ece-fdfc48f03102.jpg" width="30%" height="30%">
+<img src="https://user-images.githubusercontent.com/58468910/84813070-fee9b480-b02c-11ea-94e2-985a53ce4fce.jpg" width="30%" height="30%">
+<img src="https://user-images.githubusercontent.com/58468910/84813107-0dd06700-b02d-11ea-80b5-180c6cfc676c.jpg" width="30%" height="30%">
 
-<img src="https://user-images.githubusercontent.com/58468910/84812928-c8ac3500-b02c-11ea-834d-d55d18769624.jpg" width="50%" height="50%">
-
-<img src="https://user-images.githubusercontent.com/58468910/84812952-d2ce3380-b02c-11ea-858c-58c76618ce6b.jpg" width="50%" height="50%">
-
-<img src="https://user-images.githubusercontent.com/58468910/84812961-d6fa5100-b02c-11ea-8c3f-9d7d9358ff5f.jpg" width="50%" height="50%">
-
-<img src="https://user-images.githubusercontent.com/58468910/84812991-e2e61300-b02c-11ea-9ece-fdfc48f03102.jpg" width="50%" height="50%">
-
-<img src="https://user-images.githubusercontent.com/58468910/84813070-fee9b480-b02c-11ea-94e2-985a53ce4fce.jpg" width="50%" height="50%">
-
-<img src="https://user-images.githubusercontent.com/58468910/84813107-0dd06700-b02d-11ea-80b5-180c6cfc676c.jpg" width="50%" height="50%">
+# Support
+Give a ⭐️ if this project helped you!
